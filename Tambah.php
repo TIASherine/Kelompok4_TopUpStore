@@ -1,13 +1,13 @@
 <center>
     <?php
-    include 'koneksiDB.php';
+    include 'KonekDatabase.php';
     ?>
 
     <body style="background-color: cornsilk;">
 
         <fieldset style="background-color: lavender; margin: 100px 400px;">
             <form action="" method="post">
-                <h2> Tambah Mahasiswa </h2>
+                <h2> Tambah </h2>
 
                 <hr>
 
@@ -59,18 +59,19 @@
 
         <?php
         if (isset($_POST['submit'])) {
-            $nama = $_POST['nama'];
-            $nim = $_POST['nim'];
-            $kelas = $_POST['kelas'];
-            $username = $_POST['username'];
-            $password = MD5($_POST['password']);
+            $idTransaksi = $_POST['ID_TRANSAKSI'];
+            $idToko = $_POST['ID_TOKO_TR'];
+            $idPlayer = $_POST['ID_PLAYER_TR'];
+            $ProdukTr = $_POST['PRODUK_TRANSAKSI'];
+            $harga = $_POST['HARGA'];
+            $waktu_tr = $_POST['WAKTU_TR'];
 
-            $koneksi->query("INSERT INTO MAHASISWA (NAMA, NIM, KELAS, USERNAME, PASSWORD) 
-                    VALUES ('$nama', '$nim', '$kelas', '$username', '$password')");
+            $koneksi->query("INSERT INTO TRANSAKSI (ID_TRANSAKSI, ID_TOKO_TR, ID_PLAYER_TR, PRODUK_TRANSAKSI, HARGA, WAKTU_TR) 
+                    VALUES ('$idTransaksi', '$idToko', '$idPlayer', '$ProdukTr', '$harga', '$waktu_tr'");
 
-            header("Location: tampilMhs.php");
+            header("Location: Admin.php");
         } else if (isset($_POST['cancel'])) {
-            header("Location: tampilMHS.php");
+            header("Location: Admin.php");
         }
         ?>
 

@@ -1,9 +1,9 @@
 <?php  
-include 'koneksiDB.php';
+include 'konekDatabase.php';
 $id = $_GET['id'];
 
 
-$koneksi->query("DELETE FROM MAHASISWA WHERE id = $id");
+$koneksi->query("DELETE FROM topupstore WHERE id = $id");
 
-header("Location: tampilMHS.php");
+header("Location: Admin.php");
 ?>

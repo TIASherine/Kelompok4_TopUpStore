@@ -32,7 +32,6 @@
             </thead>
             <tbody>
                 <?php
-                // Contoh data dari database
                 $admins = [
                     ['id' => 1, 'nama' => 'Admin Utama', 'email' => 'admin@bennett.id'],
                     ['id' => 2, 'nama' => 'Staff IT', 'email' => 'it@bennett.id'],
