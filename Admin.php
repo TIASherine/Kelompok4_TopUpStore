@@ -1,11 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Analog Store</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url(https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);
+    </style>
 </head>
+
 <body>
-    
+    <header>
+        <a href="home.html" class="logo">Bennett id</a>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="Produk.html ">Products</a>
+            <a href="shop.php">Shop</a>
+            <a href="about_us.html" class="navigation">About Us</a>
+            <a href="contact.html">Contact Us</a>
+        </nav>
+    </header>
 </body>
+
 </html>
