@@ -372,6 +372,7 @@ header nav a.navigation {
     backdrop-filter: blur(5px);
     border: 1px solid rgba(113, 67, 67, 0.1);
 }
+
 .customer-details {
     margin-top: 30px;
     border-top: 1px solid rgba(255,255,255,0.2);
@@ -477,4 +478,15 @@ header nav a.navigation {
 .delete-btn {
     background-color: #f44336;
     color: white;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 20px;
+}
+
+.break {
+    margin: 100px 0;
 }
