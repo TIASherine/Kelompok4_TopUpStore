@@ -97,7 +97,7 @@ $orders = getOrders($koneksi, $search, $status_filter);
     }
 
     a {
-        color: red;
+        color:rgb(107, 228, 63);
         text-decoration: none;
     }
 </style>
@@ -112,7 +112,7 @@ $orders = getOrders($koneksi, $search, $status_filter);
             <form method="GET">
                 <input type="text" name="search" placeholder="Cari Transaksi.."
                     value="<?php echo htmlspecialchars($search ?? ''); ?>"
-                    style="height: 25px; width: 200px; margin: 10px 0;">
+                    style="height: 20px; width: 200px; margin: 10px 0;">
 
                 <br>
 
@@ -146,8 +146,7 @@ $orders = getOrders($koneksi, $search, $status_filter);
                 </tr>
                 
                 <tr>
-                    <a href="crud.php?aksi=tambah&id=<?= isset($_GET['id']) ? $_GET['id'] : '' ?>"> Tambah </a> &nbsp;
-                    <a href="crud.php?aksi=update&id=<?= isset($_GET['id']) ? $_GET['id'] : '' ?>"> Edit </a>
+                    <a href="crud.php?aksi=tambah&id=<?= isset($_GET['id']) ? $_GET['id'] : '' ?>"> Tambah Data Baru </a> 
                 </tr>
             </thead>
 
