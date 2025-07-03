@@ -1,174 +1,126 @@
 <?php
 include 'konekDatabase.php';
 
-$aksi = $_GET['aksi'];
-$id = $_GET['id'];
+$aksi = $_GET['aksi'] ?? '';
+$id = $_GET['id'] ?? '';
 
 if ($aksi == 'hapus') {
-    $koneksi->query("DELETE FROM topupstore WHERE id = $id");
+    $koneksi->query("DELETE FROM TRANSAKSI WHERE ID_TRANSAKSI = '$id'");
+    header("Location: transaksi.php");
+    exit();
+}
 
-    header("Location: Admin.php");
-} else if ($aksi == 'update') {
-
-    $id = $_GET['ID_TRANSAKSI'];
-
-    $query = mysqli_query($koneksi, "SELECT*FROM TRANSAKSI WHERE ID_TRANSAKSI = $id");
+if ($aksi == 'update') {
+    $query = mysqli_query($koneksi, "SELECT * FROM TRANSAKSI WHERE ID_TRANSAKSI = '$id'");
     $data = mysqli_fetch_array($query);
-    ?>
+}
+?>
 
-        <style>
-            table,
-            fieldset {
-                font-size: 20px;
-            }
-        </style>
+<!DOCTYPE html>
+<html>
+<head>
+    <title><?= ucfirst($aksi) ?> Data Transaksi</title>
+    <style>
+        table, fieldset {
+            font-size: 18px;
+        }
+        body {
+            background-color: blanchedalmond;
+        }
+        fieldset {
+            background-color: <?= $aksi == 'tambah' ? 'lavender' : 'khaki' ?>;
+            margin: 100px auto;
+            width: 50%;
+        }
+        td {
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
 
-        <body style="background-color: blanchedalmond;">
+<fieldset>
+    <form action="" method="post">
+        <h2><?= ucfirst($aksi) ?> Transaksi</h2>
+        <hr>
+        <table>
+            <?php if ($aksi == 'update'): ?>
+                <tr>
+                    <td>ID TRANSAKSI</td>
+                    <td>: <?= $data['ID_TRANSAKSI'] ?></td>
+                </tr>
+            <?php else: ?>
+                <tr>
+                    <td>ID TRANSAKSI</td>
+                    <td>: <input type="text" name="ID_TRANSAKSI" required></td>
+                </tr>
+            <?php endif; ?>
 
-            <fieldset style="background-color: khaki; margin: 100px 400px;">
-                <form action="" method="post">
-                    <h2> Update History </h2>
+            <tr>
+                <td>ID TOKO</td>
+                <td>: <input type="text" name="ID_TOKO_TR" value="<?= $data['ID_TOKO_TR'] ?? '' ?>" required></td>
+            </tr>
+            <tr>
+                <td>ID PLAYER</td>
+                <td>: <input type="text" name="ID_PLAYER_TR" value="<?= $data['ID_PLAYER_TR'] ?? '' ?>" required></td>
+            </tr>
+            <tr>
+                <td>PRODUK</td>
+                <td>: <input type="text" name="PRODUK_TRANSAKSI" value="<?= $data['PRODUK_TRANSAKSI'] ?? '' ?>" required></td>
+            </tr>
+            <tr>
+                <td>HARGA</td>
+                <td>: <input type="text" name="HARGA" value="<?= $data['HARGA'] ?? '' ?>" required></td>
+            </tr>
+            <tr>
+                <td>WAKTU TRANSAKSI</td>
+                <td>: <input type="datetime-local" name="WAKTU_TR" value="<?= $data['WAKTU_TR'] ?? '' ?>" required></td>
+            </tr>
 
-                    <hr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" name="submit" value="<?= ucfirst($aksi) ?>" style="margin-top: 10px;">
+                    <input type="submit" name="cancel" value="Batal" style="margin-top: 10px;">
+                </td>
+            </tr>
+        </table>
+    </form>
+</fieldset>
 
-                    <table>
-                        <tr>
-                            <td> ID TRANSAKSI </td>
-                            <td> : </td>
-                            <td> <input type="text" name="nama" id="nama" value="<?php print $data['nama'] ?>"> </td>
-                        </tr>
+</body>
+</html>
 
-                        <tr>
-                            <td> ID TOKO </td>
-                            <td> : </td>
-                            <td> <input type="text" name="idToko" id="idToko" value="<?php print $data['idToko'] ?>"> </td>
-                        </tr>
+<?php
+if (isset($_POST['cancel'])) {
+    header("Location: transaksi.php");
+    exit();
+}
 
-                        <tr>
-                            <td> ID PLAYER </td>
-                            <td> : </td>
-                            <td> <input type="text" name="idPlayer" id="idPlayer" value="<?php print $data['idPlayer'] ?>"> </td>
-                        </tr>
+if (isset($_POST['submit'])) {
+    $idTransaksi = 'ID_TRANSAKSI';
+    $idToko = $_POST['ID_TOKO_TR'];
+    $idPlayer = $_POST['ID_PLAYER_TR'];
+    $produk = $_POST['PRODUK_TRANSAKSI'];
+    $harga = $_POST['HARGA'];
+    $waktu = $_POST['WAKTU_TR'];
 
-                        <tr>
-                            <td> PRODUK TRANSAKSI </td>
-                            <td> : </td>
-                            <td> <input type="text" name="produk" id="produk" value="<?php print $data['produk'] ?>"> </td>
-                        </tr>
+    if ($aksi == 'tambah') {
+        $sql = "INSERT INTO TRANSAKSI (ID_TRANSAKSI, ID_TOKO_TR, ID_PLAYER_TR, PRODUK_TRANSAKSI, HARGA, WAKTU_TR)
+                VALUES ('$idTransaksi', '$idToko', '$idPlayer', '$produk', '$harga', '$waktu')";
+    } elseif ($aksi == 'update') {
+        $sql = "UPDATE TRANSAKSI SET 
+                    ID_TOKO_TR = '$idToko',
+                    ID_PLAYER_TR = '$idPlayer',
+                    PRODUK_TRANSAKSI = '$produk',
+                    HARGA = '$harga',
+                    WAKTU_TR = '$waktu'
+                WHERE ID_TRANSAKSI = '$idTransaksi'";
+    }
 
-                        <tr>
-                            <td> HARGA </td>
-                            <td> : </td>
-                            <td> <input type="text" name="harga" id="harga" value="<?php print $data['harga'] ?>"> </td>
-                        </tr>
-
-                        <tr>
-                            <td> WAKTU TRANSAKSI </td>
-                            <td> : </td>
-                            <td> <input type="datetime-local" name="waktuTr" id="waktuTr" value="<?php print $data['waktuTr'] ?>"> </td>
-                        </tr>
-
-                        <tr>
-                            <td colspan="3" align="center"> <input type="submit" name="submit" value="Update"
-                                    style="margin-top: 10px;"> </td>
-                        </tr>
-
-                        <tr>
-                            <td colspan="3" align="center"> <input type="submit" name="cancel" value="Batal"
-                                    style="margin-top: 10px;"> </td>
-                        </tr>
-                    </table>
-
-                </form>
-            </fieldset>
-
-            <?php
-            if (isset($_POST['submit'])) {
-                $nama = $_POST['nama'];
-                $nim = $_POST['nim'];
-                $kelas = $_POST['kelas'];
-                $username = $_POST['username'];
-                $password = MD5($_POST['password']);
-
-                $koneksi->query("UPDATE topupstore SET NAMA='$nama', NIM='$nim', KELAS='$kelas', USERNAME='$username', PASSWORD='$password' WHERE ID = $id");
-
-                header("Location: Admin.php");
-            } else if (isset($_POST['cancel'])) {
-                header("Location: Admin.php");
-            }
-
-} else if ($aksi == 'tambah') {
-
-    ?>
-
-                <fieldset style="background-color: lavender; margin: 100px 400px;">
-                    <form action="" method="post">
-                        <h2> Tambah </h2>
-
-                        <hr>
-
-                        <table>
-                            <tr>
-                                <td> Nama </td>
-                                <td> : </td>
-                                <td> <input type="text" name="nama" id=""> </td>
-                            </tr>
-
-                            <tr>
-                                <td> NIM </td>
-                                <td> : </td>
-                                <td> <input type="text" name="nim" id=""> </td>
-                            </tr>
-
-                            <tr>
-                                <td> Kelas </td>
-                                <td> : </td>
-                                <td> <input type="text" name="kelas" id=""> </td>
-                            </tr>
-
-                            <tr>
-                                <td> Username </td>
-                                <td> : </td>
-                                <td> <input type="text" name="username" id=""> </td>
-                            </tr>
-
-                            <tr>
-                                <td> Password </td>
-                                <td> : </td>
-                                <td> <input type="password" name="password" id=""> </td>
-                            </tr>
-
-                            <tr>
-                                <td colspan="3" align="center"> <input type="submit" name="submit" value="Tambah"
-                                        style="margin-top: 10px;"> </td>
-
-                            </tr>
-
-                            <tr>
-                                <td colspan="3" align="center"> <input type="submit" name="cancel" value="Batal"
-                                        style="margin-top: 10px;"> </td>
-                            </tr>
-                        </table>
-
-                    </form>
-                </fieldset>
-
-            <?php
-            if (isset($_POST['submit'])) {
-                $idTransaksi = $_POST['ID_TRANSAKSI'];
-                $idToko = $_POST['ID_TOKO_TR'];
-                $idPlayer = $_POST['ID_PLAYER_TR'];
-                $ProdukTr = $_POST['PRODUK_TRANSAKSI'];
-                $harga = $_POST['HARGA'];
-                $waktu_tr = $_POST['WAKTU_TR'];
-
-                $koneksi->query("INSERT INTO TRANSAKSI (ID_TRANSAKSI, ID_TOKO_TR, ID_PLAYER_TR, PRODUK_TRANSAKSI, HARGA, WAKTU_TR) 
-                    VALUES ('$idTransaksi', '$idToko', '$idPlayer', '$ProdukTr', '$harga', '$waktu_tr'");
-
-                header("Location: Admin.php");
-            } else if (isset($_POST['cancel'])) {
-                header("Location: Admin.php");
-            }
-
+    if (isset($sql)) {
+        $koneksi->query($sql);
+        header("Location: transaksi.php");
+        exit();
+    }
 }
 ?>
