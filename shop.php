@@ -1,25 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analog Store</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        @import url(https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);        
-    </style>
-</head>
-<body>
-    <header>
-        <a href="home.html" class="logo">Bennet id</a>
-        <nav>
-            <a href="home.html">Home</a>
-            <a href="Produk.html">Products</a>
-            <a href="shop.php" class="navigation">Shop</a>
-            <a href="about_us.html">About Us</a>
-            <a href="#">Contact Us</a>
-        </nav>
-    </header>
+<?php
+include 'header.php';
+?>
     
     <main class="main-content">
         <div class="checkout-container">
@@ -68,22 +49,18 @@
             </div>
             
             <div class="order-summary">
-                <h3>Ringkasan Pesanan</h3>
+                <h3> Struk Pemesanan </h3>
                 <div class="summary-item">
                     <span>Game:</span>
-                    <span id="summary-game">-</span>
+                    <span id="summary-game"> <?php echo $_POST['game'] ?? ''?> </span>
                 </div>
                 <div class="summary-item">
                     <span>Produk:</span>
-                    <span id="summary-product">-</span>
-                </div>
-                <div class="summary-item">
-                    <span>Harga:</span>
-                    <span id="summary-price">Rp 0</span>
+                    <span id="summary-product"> <?php echo $_POST['product'] ?? ''?> </span>
                 </div>
                 <div class="summary-total">
                     <span>Total Pembayaran:</span>
-                    <span id="summary-total">Rp 0</span>
+                    <span id="summary-total"> <?php echo $_POST['price'] ?? ''?> </span>
                 </div>
 
                 <?php
@@ -128,7 +105,7 @@
                             echo '<p>Silakan pilih metode pembayaran untuk melihat instruksi</p>';
                     }
                     
-                    echo '<p style="margin-top: 10px; font-size: 0.9em;">Setelah pembayaran, harap konfirmasi ke WhatsApp: <strong>0821-6994-9018</strong> dengan menyertakan bukti transfer.</p>';
+                    echo '<p style="margin-top: 10px; font-size: 0.9em;">Setelah pembayaran, harap konfirmasi ke WhatsApp: <strong> <a href="https://wa.me/+6282169949018" style="color: white;"> Bennett id </a> </strong> dengan menyertakan bukti transfer.</p>';
                     echo '</div>';
                     echo '</div>';
                 }

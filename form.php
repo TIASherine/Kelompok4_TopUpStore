@@ -85,7 +85,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </ul>
                         <p style="margin-top: 15px; font-weight: bold;">Setelah pembayaran, konfirmasi ke WhatsApp 0812-3456-7890 dengan menyertakan bukti transfer.</p>
                     </div>
-                    <a href="home.html" class="confirm-button" style="display: block; text-align: center; margin-top: 30px; text-decoration: none;">Kembali ke Beranda</a>
                 </div>
             </div>
         </main>
