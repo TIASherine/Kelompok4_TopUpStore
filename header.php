@@ -21,10 +21,6 @@
         <nav>
             <a class="<?= ($page == 'home') ? 'navigation' : '' ?>" href="home.php"> Home </a>
             <a class="<?= ($page == 'produk') ? 'navigation' : '' ?>" href="Produk.php"> Products </a>
-            <a class="<?= ($page == 'about') ? 'navigation' : '' ?>" href="about_us.php"> About Us </a>
-            <a class="<?= ($page == 'contact') ? 'navigation' : '' ?>" href="contact.php"> Contact Us </a>
-            <a class="<?= ($page == 'index') ? 'navigation' : '' ?>" href="index.php"> Login </a>
+            <a class="<?= ($page == 'index') ? 'navigation' : '' ?>" href="admin.php"> Transaksi </a>
         </nav>
     </header>
-
-    <div class="break"> </div>
