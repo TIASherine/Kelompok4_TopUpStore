@@ -310,6 +310,10 @@ header nav a.navigation {
     font-size: 1rem;
 }
 
+.form-group select {
+    width: 70%;
+}
+
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
@@ -317,7 +321,9 @@ header nav a.navigation {
 }
 
 .confirm-button {
-    width: 100%;
+    display: block;
+    margin: 20px auto 0 auto;
+    width: 50%;
     padding: 15px;
     background: #4CAF50;
     color: white;
@@ -333,6 +339,7 @@ header nav a.navigation {
 .confirm-button:hover {
     background: #3e8e41;
 }
+
 
 .aboutus {
     width: 80%;
@@ -515,4 +522,3 @@ textarea {
 textarea {
     height: 100px;
 }
-

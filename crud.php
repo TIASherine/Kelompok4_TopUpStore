@@ -15,6 +15,10 @@ if ($aksi === 'update') {
     $result = $koneksi->query("SELECT * FROM TRANSAKSI WHERE ID_TRANSAKSI = '$id'");
     $data = $result->fetch_assoc();
 }
+
+$waktu_tr_raw = $order['WAKTU_TR'] ?? '';
+$waktu_tr_formatted = $waktu_tr_raw ? date('Y-m-d\TH:i', strtotime($waktu_tr_raw)) : '';
+
 ?>
 
 <!DOCTYPE html>
@@ -62,13 +66,14 @@ if ($aksi === 'update') {
             font-size: 14px;
             margin-left: 10px;
         }
-
+        
         select {
             width: 64%;
         }
 
-        input[type="submit"] {
-            width: 80px;
+        input[type="submit"], 
+        input[type="button"] {
+            min-width: 70px;
             margin-top: 10px;
             padding: 6px 12px;
         }
@@ -108,16 +113,17 @@ if ($aksi === 'update') {
                 <tr>
                     <td>PRODUK</td>
                     <td>:
-                        <select id="beli" name="PRODUK_TRANSAKSI" onchange="updateHarga()" required>
-                            <option value="diamondML">Diamond - Mobile Legends</option>
-                            <option value="diamondFF">Diamond - Free Fire</option>
-                            <option value="UC">UC - PUBG</option>
-                            <option value="points">Points - Valorant</option>
-                            <option value="primogem">Primogem - Genshin Impact</option>
-                            <option value="lunite">Lunite - Wuthering Waves</option>
-                            <option value="monochrome">Monochrome - Zenless Zone Zero</option>
-                            <option value="robux">Robux - Roblox</option>
-                            <option value="token">Token - Honor of Kings</option>
+                        <select id="PRODUK_TRANSAKSI" name="PRODUK_TRANSAKSI" onchange="updateHarga()" required>
+                            <option value=""> Pilih Produk </option>
+                            <option value="diamondML"> Diamond - Mobile Legends </option>
+                            <option value="diamondFF"> Diamond - Free Fire </option>
+                            <option value="UC"> UC - PUBG </option>
+                            <option value="points"> Points - Valorant </option>
+                            <option value="primogem"> Primogem - Genshin Impact </option>
+                            <option value="lunite"> Lunite - Wuthering Waves </option>
+                            <option value="monochrome"> Monochrome - Zenless Zone Zero </option>
+                            <option value="robux"> Robux - Roblox </option>
+                            <option value="token"> Token - Honor of Kings </option>
                         </select>
                     </td>
                 </tr>
@@ -128,10 +134,24 @@ if ($aksi === 'update') {
                         <input type="text" id="harga" name="HARGA" value="<?= $data['HARGA'] ?? '10000' ?>" required>
                     </td>
                 </tr>
-                
+
                 <tr>
                     <td>WAKTU TRANSAKSI</td>
-                    <td> : <input type="datetime-local" name="WAKTU_TR" value="<?= $data['WAKTU_TR'] ?? '' ?>">
+                    <td> : <input type="datetime-local" name="WAKTU_TR" value="<?= $order['WAKTU_TR'] ?? '' ?>">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td> METODE PEMBAYARN </td>
+                    <td> :
+                        <select id="paymentMethod" name="paymentMethod" onchange="paymentMethod()" required>
+                            <option value=""> Pilih Metode Pembayaran </option>
+                            <option value="dana"> DANA </option>
+                            <option value="gopay"> GoPay </option>
+                            <option value="ovo"> OVO </option>
+                            <option value="bank"> Transfer Bank </option>
+                            <option value="qris"> QRIS </option>
+                        </select>
                     </td>
                 </tr>
             </table>
@@ -140,7 +160,7 @@ if ($aksi === 'update') {
 
             <div style="text-align: center;">
                 <input type="submit" name="submit" value="<?= ucfirst($aksi) ?>">
-                <input type="submit" name="cancel" value="Batal" onclick="home.php">
+                <a href="transaksi.php"> <input type="button" name="cancel" value="Batal"> </a>
             </div>
         </form>
     </fieldset>
@@ -195,7 +215,7 @@ if (isset($_POST['submit'])) {
             token: 30000
         };
 
-        const selectedProduk = document.getElementById('beli').value;
+        const selectedProduk = document.getElementById('PRODUK_TRANSAKSI').value;
         const hargaInput = document.getElementById('harga');
         hargaInput.value = hargaMap[selectedProduk] ?? '';
     }

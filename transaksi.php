@@ -4,12 +4,12 @@ include 'konekDatabase.php';
 // Fungsi untuk mendapatkan semua pesanan
 function getOrders($conn, $search = null, $status_filter = null)
 {
-    $sql = "SELECT * FROM transaksi WHERE 1=1";
+    $sql = "SELECT * FROM TRANSAKSI";
     $params = [];
     $types = "";
 
     if ($search) {
-        $sql .= " AND (ID_TRANSAKSI LIKE ? OR ID_TOKO_TR LIKE ? OR ID_PLAYER_TR	 LIKE ? OR PRODUK_TRANSAKSI LIKE ?) OR HARGA LIKE ? OR WAKTU_TR LIKE ?";
+        $sql .= " AND (ID_TRANSAKSI LIKE ? OR ID_TOKO_TR LIKE ? OR ID_PLAYER_TR	 LIKE ? OR PRODUK_TRANSAKSI LIKE ? OR HARGA LIKE ? OR WAKTU_TR LIKE ?";
         $search_term = "%$search%";
         $params = array_fill(0, 4, $search_term);
         $types = "ssss";
@@ -50,7 +50,7 @@ if (isset($_POST['update_status'])) {
     $stmt->execute();
     $stmt->close();
 
-    header("Location: admin.php");
+    header("Location: transaksi.php");
     exit;
 }
 
@@ -63,7 +63,7 @@ if (isset($_GET['delete_id'])) {
     $stmt->execute();
     $stmt->close();
 
-    header("Location: admin.php");
+    header("Location: transaksi.php");
     exit;
 }
 
@@ -80,7 +80,7 @@ $orders = getOrders($koneksi, $search, $status_filter);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Analog Store</title>
+    <title> Transaksi Bennet id </title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -144,10 +144,7 @@ $orders = getOrders($koneksi, $search, $status_filter);
                     <th> Status </th>
                     <th> Aksi </th>
                 </tr>
-                
-                <tr>
-                    <a href="crud.php?aksi=tambah&id=<?= isset($_GET['id']) ? $_GET['id'] : '' ?>"> Tambah Data Baru </a> 
-                </tr>
+
             </thead>
 
             <br> <br>

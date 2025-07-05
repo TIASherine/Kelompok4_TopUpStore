@@ -59,7 +59,7 @@ include 'header.php';
         
             <div class="product-card">
                 <div class="product-image-container">
-                    <img class="product-image" src="https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/1c1776bd1bdd921061a53953d81a393ef69ce633-1920x1080.jpg?auto=format&fit=fill&q=80&w=567" alt="Voucher Game 4">
+                    <img class="product-image" src="https://hasagi.gg/wp-content/uploads/2024/09/4ebcb533-e184-42f3-833b-9aa47a81f39e.jpg" alt="Voucher Game 4">
                 </div>
                 <div class="product-description">
                     <h3>Voucher Valorant</h3>
@@ -92,7 +92,7 @@ include 'header.php';
             
             <div class="product-card">
                 <div class="product-image-container">
-                    <img class="product-image" src="https://c2c.fp.guinfra.com/file/67e0d59419d9d221836ba80bQm4iyc5T03" alt="Voucher Game 6">
+                    <img class="product-image" src="https://shop.ldrescdn.com/rms/ld-space/process/img/7e0c0c9d7af646c08b0871b9e494e05b1745378017.png?x-oss-process=image/format,webp" alt="Voucher Game 6">
                 </div>
                 <div class="product-description">
                     <h3>Voucher Wuthering Waves</h3>
@@ -140,7 +140,7 @@ include 'header.php';
 
             <div class="product-card">
                 <div class="product-image-container">
-                    <img class="product-image" src="https://www.lapakgaming.com/blog/en-my/wp-content/uploads/2024/07/loong.jpg" alt="Voucher Game 8">
+                    <img class="product-image" src="https://assets.pikiran-rakyat.com/crop/0x0:0x0/720x0/webp/photo/2024/06/19/2881656601.jpg" alt="Voucher Game 8">
                 </div>
                 <div class="product-description">
                     <h3>Voucher Honor of Kings</h3>
