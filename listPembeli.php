@@ -50,7 +50,7 @@ if (isset($_GET['delete_id'])) {
 $search = isset($_GET['search']) ? trim($_GET['search']) : null;
 $status_filter = isset($_GET['status_filter']) ? $_GET['status_filter'] : null;
 
-$pembeli= getPembeli($koneksi, $search, $status_filter);
+$pembeli = getPembeli($koneksi, $search, $status_filter);
 ?>
 
 <!DOCTYPE html>
@@ -68,18 +68,19 @@ $pembeli= getPembeli($koneksi, $search, $status_filter);
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0 200px;
+        margin: 0 350px;
     }
 
     table {
-        margin-bottom: 15px;
+        margin: 0 auto 35px auto;
+        border-collapse: collapse;
     }
 
     tr,
     td,
     th {
         text-align: center;
-        width: 200px;
+        width: 150px;
     }
 
     a {
@@ -105,24 +106,22 @@ $pembeli= getPembeli($koneksi, $search, $status_filter);
             </form>
         </div>
 
+        <br> <br>
+
         <table>
             <thead>
                 <tr>
-                    <th> ID Player </th>
-                    <th> Username </th>
-                    <th> Metode Pembayaran </th>
-                    <th> Aksi </th>
+                    <th>ID Player</th>
+                    <th>Username</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
-
-            <br> <br>
 
             <tbody>
                 <?php foreach ($pembeli as $list): ?>
                     <tr>
                         <td><?= htmlspecialchars($list['ID_PLAYER']) ?></td>
                         <td><?= htmlspecialchars($list['USERNAME']) ?></td>
-                        <td><?= htmlspecialchars($list['METODE_PEMBAYARAN']) ?></td>
                         <td>
                             <a href="listPembeli.php?delete_id=<?= urlencode($list['ID_PLAYER']) ?>"
                                 onclick="return confirm('Yakin ingin menghapus pembeli ini?')">
@@ -132,8 +131,8 @@ $pembeli= getPembeli($koneksi, $search, $status_filter);
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-
         </table>
+
 
         <a href="home.php"> Kembali </a>
     </div>

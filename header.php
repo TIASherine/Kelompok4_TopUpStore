@@ -19,8 +19,6 @@
     <header>
         <a href="home.html" class="logo"> Bennett id </a>
         <nav>
-            <a class="<?= ($page == 'home') ? 'navigation' : '' ?>" href="home.php"> Beranda </a>
-            <a class="<?= ($page == 'game') ? 'navigation' : '' ?>" href="game.php"> Game </a>
             <a href="transaksi.php"> Transaksi </a>
             <a href="listPembeli.php"> List Pembeli </a>
         </nav>
