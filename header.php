@@ -1,3 +1,7 @@
+<?php
+
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -13,10 +17,10 @@
 
 <body>
     <header>
-        <a href="home.html" class="logo"> Bennett id </a>
+        <a href="home.php" class="logo"> Bennett id </a>
         <nav>
-            <a href="transaksi.php"> Transaksi </a>
-            <a href="listPembeli.php"> List Pembeli </a>
-            <a href="listToko.php"> List Toko </a>
+            <a href="home.php"> Beranda </a>
+             <a href="history.php"> History </a>
+            <a href="login.php"> Login </a>
         </nav>
     </header>
