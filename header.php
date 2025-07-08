@@ -17,5 +17,6 @@
         <nav>
             <a href="transaksi.php"> Transaksi </a>
             <a href="listPembeli.php"> List Pembeli </a>
+            <a href="listToko.php"> List Toko </a>
         </nav>
     </header>

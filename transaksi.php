@@ -109,7 +109,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
             <tbody>
                 <?php if (empty($orders)): ?>
-                    <tr><td colspan="9">Tidak ada transaksi ditemukan.</td></tr>
+                    <tr><td colspan="9"> Data transaksi tidak ditemukan.</td></tr>
                 <?php else: ?>
                     <?php foreach ($orders as $order): ?>
                         <tr>

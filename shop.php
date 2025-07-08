@@ -16,7 +16,7 @@ $status = 'Menunggu';
 if ($_SERVER["REQUEST_METHOD"] == "POST" && $pembeliId && $name && $paymentMethod) {
     mysqli_query($koneksi, "INSERT IGNORE INTO PEMBELI (ID_PEMBELI, USERNAME) VALUES ('$pembeliId', '$name')");
 
-    mysqli_query($koneksi, "INSERT IGNORE INTO TOKO (ID_TOKO, NAMA_GAME, PRODUK, HARGA) VALUES ('$idToko', '$game', '$produk', '$harga')");
+    mysqli_query($koneksi, "INSERT IGNORE INTO TOKO (ID_TOKO, NAMA_GAME, PRODUK, HARGA) VALUES ('$idToko', '$game', '$produk', '$hargaAngka')");
 
     mysqli_query($koneksi, "INSERT INTO TRANSAKSI (ID_TOKO_TR, ID_PEMBELI_TR, PRODUK_TRANSAKSI, HARGA, METODE_PEMBAYARAN, WAKTU_TR, STATUS) 
                 VALUES ('$idToko', '$pembeliId', '$produk', '$hargaAngka', '$paymentMethod', '$tanggal', '$status')");
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $pembeliId && $name && $paymentMetho
                     <br>
 
                     <button type="submit" class="confirm-button"> Konfirmasi Pembayaran </button>
-                    <button type="button" class="confirm-button" onclick="window.location.href='home.php'"> Batal
+                    <button type="button" class="confirm-button" onclick="window.location.href='home.php'"> Kembali
                     </button>
                 </form>
             </div>
