@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 07, 2025 at 07:11 PM
+-- Generation Time: Jul 08, 2025 at 09:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `pembeli` (
-  `ID_PLAYER` varchar(30) NOT NULL,
+  `ID_PEMBELI` varchar(30) NOT NULL,
   `USERNAME` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -36,10 +36,7 @@ CREATE TABLE `pembeli` (
 -- Dumping data for table `pembeli`
 --
 
-INSERT INTO `pembeli` (`ID_PLAYER`, `USERNAME`) VALUES
-('1223667100', 'Heyy1111'),
-('1223667188', 'Poll9912'),
-('843726195837462', 'MainBesto'),
+INSERT INTO `pembeli` (`ID_PEMBELI`, `USERNAME`) VALUES
 ('851899868', 'Sien');
 
 -- --------------------------------------------------------
@@ -60,9 +57,7 @@ CREATE TABLE `toko` (
 --
 
 INSERT INTO `toko` (`ID_TOKO`, `NAMA_GAME`, `PRODUK`, `HARGA`) VALUES
-('10099GI', 'Genshin Impact', 'Primogem', 40000.00),
-('200192WW', 'Wuthering Waves', 'Lunites', 30000.00),
-('89019R', 'Roblox', 'Robux', 30000.00);
+('100991GI', 'Genshin Impact', 'Primogem', 40000.00);
 
 -- --------------------------------------------------------
 
@@ -71,15 +66,22 @@ INSERT INTO `toko` (`ID_TOKO`, `NAMA_GAME`, `PRODUK`, `HARGA`) VALUES
 --
 
 CREATE TABLE `transaksi` (
-  `ID_TRANSAKSI` int(5) NOT NULL,
+  `ID_TRANSAKSI` int(4) NOT NULL,
   `ID_TOKO_TR` varchar(20) NOT NULL,
-  `ID_PLAYER_TR` varchar(30) NOT NULL,
+  `ID_PEMBELI_TR` varchar(30) NOT NULL,
   `PRODUK_TRANSAKSI` varchar(50) NOT NULL,
   `HARGA` decimal(10,2) NOT NULL,
   `METODE_PEMBAYARAN` varchar(40) NOT NULL,
   `WAKTU_TR` date NOT NULL,
   `STATUS` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `transaksi`
+--
+
+INSERT INTO `transaksi` (`ID_TRANSAKSI`, `ID_TOKO_TR`, `ID_PEMBELI_TR`, `PRODUK_TRANSAKSI`, `HARGA`, `METODE_PEMBAYARAN`, `WAKTU_TR`, `STATUS`) VALUES
+(1, '100991GI', '851899868', 'Primogem', 40000.00, 'GoPay', '2025-07-08', 'Menunggu');
 
 -- --------------------------------------------------------
 
@@ -88,10 +90,10 @@ CREATE TABLE `transaksi` (
 -- (See below for the actual view)
 --
 CREATE TABLE `transaksi_top_up` (
-`ID_TRANSAKSI` int(5)
-,`ID_TOKO` varchar(20)
-,`ID_PLAYER` varchar(30)
-,`PRODUK` varchar(50)
+`ID_TRANSAKSI` int(4)
+,`ID_TOKO_TR` varchar(20)
+,`ID_PEMBELI_TR` varchar(30)
+,`PRODUK_TRANSAKSI` varchar(50)
 ,`HARGA` decimal(10,2)
 ,`METODE_PEMBAYARAN` varchar(40)
 ,`WAKTU_TR` date
@@ -105,7 +107,7 @@ CREATE TABLE `transaksi_top_up` (
 --
 DROP TABLE IF EXISTS `transaksi_top_up`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `transaksi_top_up`  AS SELECT `t`.`ID_TRANSAKSI` AS `ID_TRANSAKSI`, `k`.`ID_TOKO` AS `ID_TOKO`, `p`.`ID_PLAYER` AS `ID_PLAYER`, `k`.`PRODUK` AS `PRODUK`, `t`.`HARGA` AS `HARGA`, `t`.`METODE_PEMBAYARAN` AS `METODE_PEMBAYARAN`, `t`.`WAKTU_TR` AS `WAKTU_TR`, `t`.`STATUS` AS `STATUS` FROM ((`transaksi` `t` join `pembeli` `p` on(`t`.`ID_PLAYER_TR` = `p`.`ID_PLAYER`)) join `toko` `k` on(`t`.`ID_TOKO_TR` = `k`.`ID_TOKO`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `transaksi_top_up`  AS SELECT `transaksi`.`ID_TRANSAKSI` AS `ID_TRANSAKSI`, `transaksi`.`ID_TOKO_TR` AS `ID_TOKO_TR`, `transaksi`.`ID_PEMBELI_TR` AS `ID_PEMBELI_TR`, `transaksi`.`PRODUK_TRANSAKSI` AS `PRODUK_TRANSAKSI`, `transaksi`.`HARGA` AS `HARGA`, `transaksi`.`METODE_PEMBAYARAN` AS `METODE_PEMBAYARAN`, `transaksi`.`WAKTU_TR` AS `WAKTU_TR`, `transaksi`.`STATUS` AS `STATUS` FROM `transaksi` ;
 
 --
 -- Indexes for dumped tables
@@ -115,7 +117,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 -- Indexes for table `pembeli`
 --
 ALTER TABLE `pembeli`
-  ADD PRIMARY KEY (`ID_PLAYER`);
+  ADD PRIMARY KEY (`ID_PEMBELI`);
 
 --
 -- Indexes for table `toko`
@@ -129,7 +131,8 @@ ALTER TABLE `toko`
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`ID_TRANSAKSI`),
   ADD KEY `ID_TOKO_TR` (`ID_TOKO_TR`),
-  ADD KEY `ID_PLAYER_TR` (`ID_PLAYER_TR`);
+  ADD KEY `ID_PLAYER_TR` (`ID_PEMBELI_TR`),
+  ADD KEY `CARI_STATUS` (`STATUS`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -139,7 +142,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `ID_TRANSAKSI` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID_TRANSAKSI` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -150,7 +153,7 @@ ALTER TABLE `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`ID_TOKO_TR`) REFERENCES `toko` (`ID_TOKO`),
-  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`ID_PLAYER_TR`) REFERENCES `pembeli` (`ID_PLAYER`);
+  ADD CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`ID_PEMBELI_TR`) REFERENCES `pembeli` (`ID_PEMBELI`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
