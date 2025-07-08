@@ -2,12 +2,10 @@
 session_start();
 include 'konekDatabase.php';
 
-// Proses login
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Query untuk memeriksa user
     $stmt = $koneksi->prepare("SELECT * FROM PEMBELI WHERE USERNAME = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -15,14 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        
-        // Verifikasi password (asumsi password disimpan plaintext, sebaiknya di-hash)
-        if ($password === $user['PASSWORD']) { // Ganti dengan password_verify() jika menggunakan hash
-            // Login sukses
+
+        if ($password === $user['PASSWORD']) {
             $_SESSION['user_logged_in'] = true;
             $_SESSION['user_id'] = $user['ID_PLAYER'];
             $_SESSION['username'] = $user['USERNAME'];
-            
+
             header("Location: home.php");
             exit;
         } else {
@@ -36,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -70,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .login-container h1 {
             color: white;
             margin-bottom: 24px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         .form-group {
@@ -83,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-bottom: 8px;
             font-weight: bold;
             color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .form-group input {
@@ -120,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .error-message {
             color: #ff6b6b;
             margin-bottom: 16px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .register-link {
@@ -140,10 +137,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <h1>Login Pembeli</h1>
-        
+
         <?php if (isset($error)): ?>
             <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
@@ -167,4 +165,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </body>
+
 </html>

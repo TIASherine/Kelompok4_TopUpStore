@@ -90,7 +90,6 @@ header nav a.navigation {
     }
 }
 
-
 .explore-button {
     display: inline-flex;
     background-color: #4CAF50;
@@ -256,7 +255,7 @@ header nav a.navigation {
 .checkout-container {
     display: flex;
     gap: 30px;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 30px;
 }
@@ -278,8 +277,7 @@ header nav a.navigation {
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     height: fit-content;
-    position: sticky;
-    top: 120px;
+    position: relative;
 }
 
 .checkout-title {
@@ -311,7 +309,7 @@ header nav a.navigation {
 }
 
 .form-group select {
-    width: 70%;
+    width: 51%;
 }
 
 .form-group input:focus,
@@ -323,14 +321,14 @@ header nav a.navigation {
 .confirm-button {
     display: block;
     margin: 20px auto 0 auto;
-    width: 50%;
+    width: 200px;
     padding: 15px;
     background: #4CAF50;
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 200;
     cursor: pointer;
     transition: all 0.3s ease;
     margin-top: 20px;
@@ -339,7 +337,6 @@ header nav a.navigation {
 .confirm-button:hover {
     background: #3e8e41;
 }
-
 
 .aboutus {
     width: 80%;
@@ -431,94 +428,5 @@ header nav a.navigation {
     line-height: 1.5;
 }
 
-.admin-container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 30px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
 
-.admin-title {
-    color: #4CAF50;
-    margin-bottom: 20px;
-    text-align: center;
-}
 
-.admin-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.admin-table th,
-.admin-table td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.admin-table th {
-    background-color: rgba(76, 175, 80, 0.4);
-    font-weight: 600;
-}
-
-.admin-table tr:hover {
-    background-color: rgba(255, 255, 255, 0.08);
-}
-
-.action-btn {
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    margin-right: 5px;
-}
-
-.edit-btn {
-    background-color: #2196F3;
-    color: white;
-}
-
-.delete-btn {
-    background-color: #f44336;
-    color: white;
-}
-
-.center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10px 20px;
-    min-height: 100vh;
-    gap: 20px;
-}
-
-.break {
-    margin: 40px 0;
-}
-
-.login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border: 1px solid black;
-}
-
-input[type="text"],
-input[type="email"],
-textarea {
-    width: 300px;
-    height: 40px;
-    margin: 5px;
-    padding: 5px;
-}
-
-textarea {
-    height: 100px;
-}
