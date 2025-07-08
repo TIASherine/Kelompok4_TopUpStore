@@ -31,9 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </head>
     <body>
         <header>
-            <a href="home.html" class="logo">Bennet id</a>
+            <a href="home.php" class="logo">Bennet id</a>
             <nav>
-                <a href="home.html">Home</a>
+                <a href="home.php">Home</a>
                 <a href="Produk.html">Products</a>
                 <a href="shop.html" class="navigation">Shop</a>
                 <a href="about_us.html">About Us</a>
@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 HTML;
 } else {
     // If someone tries to access this page directly without submitting the form
-    header("Location: shop.html");
+    header("Location: form.php");
     exit();
 }
 ?>

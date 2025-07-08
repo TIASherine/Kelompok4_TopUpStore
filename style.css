@@ -256,7 +256,7 @@ header nav a.navigation {
 .checkout-container {
     display: flex;
     gap: 30px;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 30px;
 }
@@ -264,7 +264,7 @@ header nav a.navigation {
 .checkout-form {
     flex: 2;
     background: rgba(255, 255, 255, 0.1);
-    padding: 30px;
+    padding: 50px;
     border-radius: 15px;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -278,8 +278,7 @@ header nav a.navigation {
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     height: fit-content;
-    position: sticky;
-    top: 120px;
+    position: relative;
 }
 
 .checkout-title {
@@ -311,7 +310,7 @@ header nav a.navigation {
 }
 
 .form-group select {
-    width: 70%;
+    width: 51%;
 }
 
 .form-group input:focus,
@@ -323,14 +322,14 @@ header nav a.navigation {
 .confirm-button {
     display: block;
     margin: 20px auto 0 auto;
-    width: 50%;
+    width: 200px;
     padding: 15px;
     background: #4CAF50;
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 200;
     cursor: pointer;
     transition: all 0.3s ease;
     margin-top: 20px;
@@ -514,7 +513,7 @@ input[type="text"],
 input[type="email"],
 textarea {
     width: 300px;
-    height: 40px;
+    height: 35px;
     margin: 5px;
     padding: 5px;
 }

@@ -1,87 +1,96 @@
 <?php
 include 'konekDatabase.php';
 
-$search = isset($_GET['search']) ? trim($_GET['search']) : null;
-$status_filter = isset($_GET['status_filter']) ? $_GET['status_filter'] : null;
+// Ambil parameter dari form
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$status_filter = isset($_GET['status_filter']) ? trim($_GET['status_filter']) : '';
 
-$sql = "SELECT * FROM TRANSAKSI_TOP_UP WHERE 1";
-if ($search) {
+// Bangun query
+$sql = "SELECT * FROM TRANSAKSI_TOP_UP WHERE 1=1";
+$params = [];
+
+if ($search !== '') {
     $search = mysqli_real_escape_string($koneksi, $search);
-    $sql .= " AND (ID_TRANSAKSI LIKE '%$search%' OR ID_TOKO_TR LIKE '%$search%' OR ID_PLAYER_TR LIKE '%$search%' OR PRODUK_TRANSAKSI LIKE '%$search%')";
+    $sql .= " AND (
+        ID_TOKO_TR LIKE '%$search%' OR
+        ID_PEMBELI_TR LIKE '%$search%' OR
+        PRODUK_TRANSAKSI LIKE '%$search%'
+    )";
 }
-if ($status_filter) {
+
+if ($status_filter !== '') {
     $status_filter = mysqli_real_escape_string($koneksi, $status_filter);
     $sql .= " AND STATUS = '$status_filter'";
 }
 
-$sql .= " ORDER BY WAKTU_TR DESC";
+$sql .= " ORDER BY ID_TRANSAKSI";
 
 $result = mysqli_query($koneksi, $sql);
-
 $orders = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $orders[] = $row;
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Transaksi Bennet id </title>
+    <title> Riwayat Transaksi </title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        table { 
+            margin-bottom: 15px; 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+
+        th, td { 
+            text-align: center; 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+        }
+
+        a { 
+            color: rgb(107, 228, 63); 
+            text-decoration: none; 
+        }
+
+        .search-bar { 
+            margin: 20px 0; 
+        }
+
+        input[type="text"],
+        select {
+            height: 25px;
+        }
+
+        input[type="text"] {
+            width: 150px;
+        }
+
+        button[type="submit"] {
+            width: 60px;
+            height: 25px;
+        }
+
+    </style>
+
 </head>
-
-<style>
-    table {
-        margin-bottom: 15px;
-    }
-
-    tr,
-    td,
-    th {
-        text-align: center;
-        width: 200px;
-    }
-
-    a {
-        color: rgb(107, 228, 63);
-        text-decoration: none;
-    }
-</style>
-
 <body>
     <div class="admin-container">
         <h1> Riwayat Transaksi </h1>
 
-        <br>
-
-        <div class="search-bar">
-            <form method="GET">
-                <input type="text" name="search" placeholder="Cari Transaksi.."
-                    value="<?php echo htmlspecialchars($search ?? ''); ?>"
-                    style="height: 20px; width: 200px; margin: 10px 0;">
-
-                <br>
-
-                <select name="status_filter">
-                    <option value=""> Tampilkan Semua </option>
-                    <option value="pending" <?php echo ($status_filter == 'menunggu') ? 'selected' : ''; ?>> Menunggu
-                    </option>
-                    <option value="selesai" <?php echo ($status_filter == 'selesai') ? 'selected' : ''; ?>> Selesai
-                    </option>
-                    <option value="gagal" <?php echo ($status_filter == 'gagal') ? 'selected' : ''; ?>> Gagal </option>
-                </select>
-
-                <button type="submit" style="width: 50px;"> Filter </button>
-
-            </form>
-        </div>
-
-        <br>
+        <form method="GET" class="search-bar">
+            <input type="text" name="search" placeholder="Cari Transaksi.." value="<?= htmlspecialchars($search) ?>">
+            <select name="status_filter">
+                <option value=""> Tampilkan Semua </option>
+                <option value="menunggu" <?= $status_filter == 'menunggu' ? 'selected' : '' ?>>Menunggu</option>
+                <option value="selesai" <?= $status_filter == 'selesai' ? 'selected' : '' ?>>Selesai</option>
+                <option value="gagal" <?= $status_filter == 'gagal' ? 'selected' : '' ?>>Gagal</option>
+            </select>
+            <button type="submit"> Cari </button>
+        </form>
 
         <table>
             <thead>
@@ -91,40 +100,34 @@ while ($row = mysqli_fetch_assoc($result)) {
                     <th> ID Pembeli </th>
                     <th> Pembelian </th>
                     <th> Harga </th>
+                    <th> Metode Pembayaran </th>
                     <th> Tanggal </th>
                     <th> Status </th>
                     <th> Aksi </th>
                 </tr>
-
             </thead>
-
-            <br> <br>
 
             <tbody>
                 <?php if (empty($orders)): ?>
-                    <tr>
-                        <td colspan="10" class="no-orders">No orders found</td>
-                    </tr>
+                    <tr><td colspan="9">Tidak ada transaksi ditemukan.</td></tr>
                 <?php else: ?>
                     <?php foreach ($orders as $order): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($order['ID_TRANSAKSI']); ?></td>
-                            <td><?php echo htmlspecialchars($order['ID_TOKO_TR']); ?></td>
-                            <td><?php echo htmlspecialchars($order['ID_PLAYER_TR']); ?></td>
-                            <td><?php echo htmlspecialchars($order['PRODUK_TRANSAKSI']); ?></td>
-                            <td> Rp <?php echo number_format($order['HARGA'], 0, ',', '.'); ?></td>
-                            <td><?php echo date('Y M d', strtotime($order['WAKTU_TR'])); ?></td>
-                            <td><?php echo htmlspecialchars($order['STATUS']); ?></td>
-
-                            <td class="actions">
-                                <a
-                                    href="crud.php?aksi=update&id=<?= $order['ID_TRANSAKSI'] ?>&table=TRANSAKSI&redirect=transaksi.php">
-                                    <img src="edit.jpeg" alt="Edit" style="width: 30px; height: 20px;">
+                            <td><?= htmlspecialchars($order['ID_TRANSAKSI']) ?></td>
+                            <td><?= htmlspecialchars($order['ID_TOKO_TR']) ?></td>
+                            <td><?= htmlspecialchars($order['ID_PEMBELI_TR']) ?></td>
+                            <td><?= htmlspecialchars($order['PRODUK_TRANSAKSI']) ?></td>
+                            <td>Rp <?= number_format($order['HARGA'], 0, ',', '.') ?></td>
+                            <td><?= htmlspecialchars($order['METODE_PEMBAYARAN']) ?></td>
+                            <td><?= date('Y-m-d', strtotime($order['WAKTU_TR'])) ?></td>
+                            <td><?= htmlspecialchars($order['STATUS']) ?></td>
+                            <td>
+                                <a href="crud.php?aksi=update&id=<?= $order['ID_TRANSAKSI'] ?>&table=TRANSAKSI&redirect=transaksi.php">
+                                    <img src="edit.jpeg" alt="Edit" width="25">
                                 </a>
-
                                 <a href="crud.php?aksi=hapus&id=<?= $order['ID_TRANSAKSI'] ?>&table=TRANSAKSI&redirect=transaksi.php"
-                                    onclick="return confirm('Yakin Ingin Menghapus Riwayat?')">
-                                    <img src="trash.jpg" alt="Hapus" style="width: 25px; height: 20px;">
+                                   onclick="return confirm('Yakin ingin menghapus transaksi ini?')">
+                                    <img src="trash.jpg" alt="Hapus" width="20">
                                 </a>
                             </td>
                         </tr>
@@ -133,8 +136,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             </tbody>
         </table>
 
-        <a href="home.php"> Kembali </a>
+        <a href="home.php"> ← Kembali </a>
     </div>
 </body>
-
 </html>

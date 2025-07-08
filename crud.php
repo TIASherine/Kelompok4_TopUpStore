@@ -56,6 +56,7 @@ while ($c = mysqli_fetch_assoc($cols)) {
 
 <head>
     <title><?= ucfirst($aksi ?: 'tambah') ?> <?= ucfirst(strtolower($table)) ?></title>
+    <img src="" alt="">
     <style>
         body {
             font-family: Arial;
@@ -86,24 +87,63 @@ while ($c = mysqli_fetch_assoc($cols)) {
 </head>
 
 <body>
-    <?php if ($back == 'shop.php'):
-        $game = $_POST['game'];
-        $product = $_POST['product'];
-        $price = preg_replace('/\D/', '', $_POST['price']);
-        $playerId = $_POST['playerId'];
-        $playerName = $_POST['playerName'];
-        $paymentMethod = $_POST['paymentMethod'];
-        $tanggal = date('Y-m-d');
-        $redirect = $_POST['redirect'] ?? 'home.php';
 
-        mysqli_query($koneksi, "INSERT IGNORE INTO PEMBELI (ID_PLAYER, USERNAME) VALUES ('$playerId', '$playerName')");
+    <main class="main-content">
+        <div class="checkout-container">
+            <div class="checkout-form">
+                <h2 class="checkout-title"> Form Pembelian </h2>
+                <form id="paymentForm" method="post" action="shop.php">
+                    <div class="form-group">
+                        <label for="game"> Game </label>
+                        <input type="text" id="game" name="game" placeholder="Mobile Legends" readonly>
+                    </div>
 
-        mysqli_query($koneksi, "INSERT INTO TRANSAKSI (ID_TOKO_TR, ID_PLAYER_TR, PRODUK_TRANSAKSI, HARGA, METODE_PEMBAYARAN, WAKTU_TR, STATUS) 
-                VALUES ('TOKO001', '$playerId', '$product', '$price', '$paymentMethod', '$tanggal', 'Menunggu')");
+                    <div class="form-group">
+                        <label for="product"> Produk </label>
+                        <input type="text" id="product" name="product" placeholder="Diamond Mobile Legends" readonly>
+                    </div>
 
-        header("Location: $back");
-        exit;
-    endif; ?>
+                    <div class="form-group">
+                        <label for="price"> Harga </label>
+                        <input type="text" id="price" name="price" placeholder="Rp 10.000" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pembeliId"> ID Pembeli </label>
+                        <input type="text" id="pembeliId" name="pembeliId" placeholder="Masukkan ID Pembeli" required
+                            value="<?= htmlspecialchars($pembeliId) ?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name"> Username Pembeli </label>
+                        <input type="text" id="name" name="name" placeholder="Masukkan Nama Pembeli" required
+                            value="<?= htmlspecialchars($name) ?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentMethod"> Metode Pembayaran </label>
+                        <select id="paymentMethod" name="paymentMethod" required>
+                            <option value=""> Pilih Metode Pembayaran </option>
+                            <option value="DANA" <?= $paymentMethod == 'DANA' ? 'selected' : '' ?>>DANA</option>
+                            <option value="GoPay" <?= $paymentMethod == 'GoPay' ? 'selected' : '' ?>>GoPay</option>
+                            <option value="OVO" <?= $paymentMethod == 'OVO' ? 'selected' : '' ?>>OVO</option>
+                            <option value="Bank Transfer" <?= $paymentMethod == 'Bank Transfer' ? 'selected' : '' ?>>
+                                Transfer
+                                Bank</option>
+                            <option value="QRIS" <?= $paymentMethod == 'QRIS' ? 'selected' : '' ?>>QRIS</option>
+                        </select>
+                    </div>
+
+                    <input type="hidden" name="idToko" id="idToko">
+                    <br>
+
+                    <button type="submit" class="confirm-button"> Konfirmasi Pembayaran </button>
+                    <button type="button" class="confirm-button" onclick="window.location.href='home.php'"> Batal
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
 </body>
 
 </html>

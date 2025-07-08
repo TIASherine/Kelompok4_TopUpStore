@@ -134,7 +134,7 @@ $pembeli = getPembeli($koneksi, $search, $status_filter);
         </table>
 
 
-        <a href="home.php"> Kembali </a>
+        <a href="home.php"> ← Kembali </a>
     </div>
 </body>
 
