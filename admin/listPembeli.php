@@ -1,15 +1,18 @@
 <?php
-include 'konekDatabase.php';
+include '../konekDatabase.php';
+
+$db = new konekDatabase();
+$koneksi = $db->getConnection();
 
 // Fungsi untuk mendapatkan semua pesanan
-function getToko($conn, $search = null)
+function getPembeli($conn, $search = null)
 {
-    $sql = "SELECT * FROM TOKO WHERE 1 = 1";
+    $sql = "SELECT * FROM PEMBELI WHERE 1 = 1";
     $params = [];
     $types = "";
 
     if ($search) {
-        $sql .= " AND (ID_TOKO LIKE ? OR NAMA_GAME LIKE ?)";
+        $sql .= " AND (ID_PEMBELI LIKE ? OR USERNAME LIKE ?)";
         $search_term = "%$search%";
         $params = [$search_term, $search_term];
         $types = "ss";
@@ -25,31 +28,31 @@ function getToko($conn, $search = null)
     $stmt->execute();
     $result = $stmt->get_result();
 
-    $toko = [];
+    $pembeli = [];
     while ($row = $result->fetch_assoc()) {
-        $toko[] = $row;
+        $pembeli[] = $row;
     }
 
-    return $toko;
+    return $pembeli;
 }
 
 // Proses hapus data
 if (isset($_GET['delete_id'])) {
     $delete_id = intval($_GET['delete_id']);
 
-    $stmt = $koneksi->prepare("DELETE FROM TOKO WHERE ID_TOKO = ?");
+    $stmt = $koneksi->prepare("DELETE FROM PEMBELI WHERE ID_PEMBELI = ?");
     $stmt->bind_param("i", $delete_id);
     $stmt->execute();
     $stmt->close();
 
-    header("Location: listToko.php");
+    header("Location: listPembeli.php");
     exit;
 }
 
 // Ambil parameter pencarian
 $search = isset($_GET['search']) ? trim($_GET['search']) : null;
 
-$toko = getToko($koneksi, $search);
+$pembeli = getPembeli($koneksi, $search);
 ?>
 
 <!DOCTYPE html>
@@ -58,8 +61,8 @@ $toko = getToko($koneksi, $search);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Toko Bennett id </title>
-    <link rel="stylesheet" href="style.css">
+    <title> Pembeli Bennett id </title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 
 <style>
@@ -91,13 +94,13 @@ $toko = getToko($koneksi, $search);
 
 <body>
     <div class="admin-container">
-        <h1> List Toko </h1>
+        <h1> List Pembeli </h1>
 
         <br>
 
         <div class="search-bar">
             <form method="GET">
-                <input type="text" name="search" placeholder="Cari Toko .."
+                <input type="text" name="search" placeholder="Cari Pembeli.."
                     value="<?php echo htmlspecialchars($search ?? ''); ?>"
                     style="height: 20px; width: 200px; margin: 10px 0;">
 
@@ -111,32 +114,28 @@ $toko = getToko($koneksi, $search);
         <table>
             <thead>
                 <tr>
-                    <th> ID Toko </th>
-                    <th> Nama Game </th>
-                    <th> Produk </th>
-                    <th> Harga </th>
-                    <th> Aksi </th>
+                    <th> UID </th>
+                    <th> Username </th>
+                    <th> Akun </th>
+                    <th>Aksi </th>
                 </tr>
             </thead>
 
             <tbody>
-            <tbody>
-                <?php if (empty($toko)): ?>
+                <?php if (empty($pembeli)): ?>
                     <tr>
-                        <td colspan="5"> Data toko tidak ditemukan. </td>
+                        <td colspan="4"> Data pembeli tidak ditemukan. </td>
                     </tr>
                 <?php else: ?>
-                    <?php foreach ($toko as $list): ?>
-                        <?php $hargaAngka = preg_replace('/\D/', '', $list['HARGA']); ?>
+                    <?php foreach ($pembeli as $list): ?>
                         <tr>
-                            <td><?= htmlspecialchars($list['ID_TOKO']) ?></td>
-                            <td><?= htmlspecialchars($list['NAMA_GAME']) ?></td>
-                            <td><?= htmlspecialchars($list['PRODUK']) ?></td>
-                            <td><?= htmlspecialchars($list['HARGA']) ?></td>
+                            <td><?= htmlspecialchars($list['ID_PEMBELI']) ?></td>
+                            <td><?= htmlspecialchars($list['USERNAME']) ?></td>
+                            <td><?= htmlspecialchars($list['USERNAME']) ?></td>
                             <td>
-                                <a href="listToko.php?delete_id=<?= urlencode($list['ID_TOKO']) ?>"
-                                    onclick="return confirm('Yakin ingin menghapus toko ini?')">
-                                    Hapus
+                                <a href="../crud.php?aksi=hapus&id=<?= $order['ID_PEMBELI'] ?>&table=PEMBELI&redirect=listPembeli.php"
+                                    onclick="return confirm('Yakin ingin menghapus pembeli ini?')">
+                                    <img src="../trash.jpg" alt="Hapus" width="20">
                                 </a>
                             </td>
                         </tr>
@@ -145,8 +144,9 @@ $toko = getToko($koneksi, $search);
             </tbody>
         </table>
 
+        <br> <br>
 
-        <a href="home.php"> ← Kembali </a>
+        <a href="adminHome.php"> ← Kembali </a>
     </div>
 </body>
 

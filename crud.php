@@ -1,18 +1,15 @@
 <?php
 include 'konekDatabase.php';
 
+$db = new konekDatabase();
+$koneksi = $db->getConnection();
+
 $table = $_GET['table'] ?? 'TRANSAKSI';
 $aksi = $_GET['aksi'] ?? '';
 $id = $_GET['id'] ?? '';
-$back = $_GET['redirect'] ?? $_SERVER['HTTP_REFERER'] ?? 'home.php';
+$back = $_GET['redirect'] ?? $_SERVER['HTTP_REFERER'] ?? 'user/adminHome.php';
 
 $data = [];
-
-// Tampilkan (untuk update)
-if ($aksi == 'update') {
-    $query = mysqli_query($koneksi, "SELECT * FROM $table WHERE ID_$table = '$id'");
-    $data = mysqli_fetch_assoc($query);
-}
 
 // Hapus
 if ($aksi == 'hapus') {
@@ -30,10 +27,16 @@ if (isset($_POST['submit'])) {
 
         $sets = [];
         foreach ($_POST as $key => $val) {
+            if ($key === 'submit')
+                continue;
             $sets[] = "$key = '$val'";
         }
+
         $sql = "UPDATE $table SET " . implode(", ", $sets) . " WHERE $id_field = '$id_val'";
     } else {
+        $post_data = $_POST;
+        unset($post_data['submit']);
+
         $columns = implode(", ", array_keys($_POST));
         $values = "'" . implode("', '", array_values($_POST)) . "'";
         $sql = "INSERT INTO $table ($columns) VALUES ($values)";
@@ -49,97 +52,92 @@ $cols = mysqli_query($koneksi, "SHOW COLUMNS FROM $table");
 while ($c = mysqli_fetch_assoc($cols)) {
     $columns[] = $c['Field'];
 }
+
+// Tampilkan (untuk update)
+if ($aksi == 'update') {
+    $query = mysqli_query($koneksi, "SELECT * FROM $table WHERE ID_$table = '$id'");
+    $data = mysqli_fetch_assoc($query);
+}
+
 ?>
 
 <!DOCTYPE html>
 <html>
+<title><?= ucfirst($aksi ?: 'tambah') ?> <?= ucfirst(strtolower($table)) ?></title>
+<link rel="stylesheet" href="style.css">
+<style>
+    @import url(https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);
 
-<head>
-    <title><?= ucfirst($aksi ?: 'tambah') ?> <?= ucfirst(strtolower($table)) ?></title>
-    <img src="" alt="">
-    <style>
-        body {
-            font-family: Arial;
-            background: #f4f4f4;
-        }
+    .checkout-container {
+        display: flex;
+        align-items: center;
+        max-width: 600px;
+    }
 
-        fieldset {
-            margin: 60px auto;
-            width: 50%;
-            padding: 20px;
-            background: white;
-        }
+    .checkout-form {
+        padding: 50px;
+    }
 
-        table td {
-            padding: 8px;
-        }
+    table td {
+        padding: 8px;
+    }
 
-        input {
-            width: 100%;
-            padding: 5px;
-        }
+    input[type="text"] {
+        width: 90%;
+        padding: 15px;
+    }
 
-        .btn {
-            margin-top: 15px;
-            padding: 8px 20px;
-        }
-    </style>
-</head>
+    select {
+        width: 100%;
+    }
+
+    .input-center {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    button {
+        height: 43px;
+        width: 60%;
+        padding: 8px 20px;
+        font-size: 1rem;
+        color: white;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.5);
+    }
+</style>
 
 <body>
-
     <main class="main-content">
         <div class="checkout-container">
             <div class="checkout-form">
                 <h2 class="checkout-title"> Form Pembelian </h2>
-                <form id="paymentForm" method="post" action="shop.php">
-                    <div class="form-group">
-                        <label for="game"> Game </label>
-                        <input type="text" id="game" name="game" placeholder="Mobile Legends" readonly>
+                <form method="POST" action="">
+                    <?php foreach ($columns as $col): ?>
+                        <?php if (strpos($col, 'ID_') === 0 && $aksi != 'update')
+                            continue; ?>
+                        <div class="form-group">
+                            <label><?= $col ?></label>
+                            <?php if ($col == 'STATUS'): ?>
+                                <select name="STATUS" id="status">
+                                    <option value="Menunggu" <?= (isset($data['STATUS']) && $data['STATUS'] === 'menunggu') ? 'selected' : '' ?>> Menunggu </option>
+                                    <option value="Selesai" <?= (isset($data['STATUS']) && $data['STATUS'] === 'selesai') ? 'selected' : '' ?>> Selesai </option>
+                                    <option value="Gagal" <?= (isset($data['STATUS']) && $data['STATUS'] === 'gagal') ? 'selected' : '' ?>> Gagal </option>
+                                </select>
+                            <?php else: ?>
+                                <input type="text" name="<?= $col ?>" value="<?= htmlspecialchars($data[$col] ?? '') ?>">
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+
+                    <br> <br>
+
+                    <div class="input-center">
+                        <input type="submit" name="submit" value="<?= ucfirst($aksi ?: 'Simpan') ?>">
+                        <br> <br>
+                        <button type="button" onclick="window.location.href='<?= $back ?>'"> Batal </button>
                     </div>
-
-                    <div class="form-group">
-                        <label for="product"> Produk </label>
-                        <input type="text" id="product" name="product" placeholder="Diamond Mobile Legends" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="price"> Harga </label>
-                        <input type="text" id="price" name="price" placeholder="Rp 10.000" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="pembeliId"> ID Pembeli </label>
-                        <input type="text" id="pembeliId" name="pembeliId" placeholder="Masukkan ID Pembeli" required
-                            value="<?= htmlspecialchars($pembeliId) ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="name"> Username Pembeli </label>
-                        <input type="text" id="name" name="name" placeholder="Masukkan Nama Pembeli" required
-                            value="<?= htmlspecialchars($name) ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="paymentMethod"> Metode Pembayaran </label>
-                        <select id="paymentMethod" name="paymentMethod" required>
-                            <option value=""> Pilih Metode Pembayaran </option>
-                            <option value="DANA" <?= $paymentMethod == 'DANA' ? 'selected' : '' ?>>DANA</option>
-                            <option value="GoPay" <?= $paymentMethod == 'GoPay' ? 'selected' : '' ?>>GoPay</option>
-                            <option value="OVO" <?= $paymentMethod == 'OVO' ? 'selected' : '' ?>>OVO</option>
-                            <option value="Bank Transfer" <?= $paymentMethod == 'Bank Transfer' ? 'selected' : '' ?>>
-                                Transfer
-                                Bank</option>
-                            <option value="QRIS" <?= $paymentMethod == 'QRIS' ? 'selected' : '' ?>>QRIS</option>
-                        </select>
-                    </div>
-
-                    <input type="hidden" name="idToko" id="idToko">
-                    <br>
-
-                    <button type="submit" class="confirm-button"> Konfirmasi Pembayaran </button>
-                    <button type="button" class="confirm-button" onclick="window.location.href='home.php'"> Batal
-                    </button>
                 </form>
             </div>
         </div>

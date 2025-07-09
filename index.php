@@ -2,30 +2,35 @@
 session_start();
 include 'konekDatabase.php';
 
+$db = new konekDatabase();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $akun = $_POST['akun'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-    $stmt = $koneksi->prepare("SELECT * FROM PEMBELI WHERE USERNAME = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if ($akun != "sudo_admin") {
+        $result = $db->execute("SELECT * FROM AKUN WHERE NAMA_AKUN = '$akun'");
 
-    if ($result->num_rows == 1) {
-        $user = $result->fetch_assoc();
-
-        if ($password === $user['PASSWORD']) {
-            $_SESSION['user_logged_in'] = true;
-            $_SESSION['user_id'] = $user['ID_PLAYER'];
-            $_SESSION['username'] = $user['USERNAME'];
-
-            header("Location: home.php");
+        if (!$result || count($result) === 0) {
+            echo "<script> alert('User Tidak Ditemukan!'); window.location.href='index.php'; </script>";
             exit;
-        } else {
-            $error = "Username atau password salah";
         }
+
+        if ($result[0]['PASSWORD'] !== $password) {
+            echo "<script> alert('Password Salah!'); window.location.href='index.php'; </script>";
+            exit;
+        }
+
+        $_SESSION['username'] = $akun;
+        header("Location: user/home.php");
     } else {
-        $error = "Username atau password salah";
+        if ($password != 'admin') {
+            echo "<script> alert('Password Salah!'); window.location.href='index.php'; </script>";
+            exit;
+        }
+        
+        $_SESSION['username'] = 'Admin';
+        header("Location: admin/adminHome.php");
     }
 }
 ?>
@@ -36,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Analog Store</title>
+    <title> Login - Analog Store </title>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -50,120 +55,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             height: 100vh;
             margin: 0;
         }
-
-        .login-container {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            padding: 30px;
-            width: 350px;
-            text-align: center;
-            color: white;
-        }
-
-        .login-container h1 {
-            color: white;
-            margin-bottom: 24px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            color: white;
-            box-sizing: border-box;
-        }
-
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .login-button {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-            transition: background 0.3s;
-        }
-
-        .login-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .error-message {
-            color: #ff6b6b;
-            margin-bottom: 16px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .register-link {
-            margin-top: 16px;
-            display: block;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .register-link a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 
 <body>
-    <div class="login-container">
-        <h1>Login Pembeli</h1>
+    <div class="register-container">
+        <h2> Login </h2>
+        <form action="" method="post">
+            <?php if (isset($error)): ?>
+                <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
 
-        <?php if (isset($error)): ?>
-            <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
+            <form method="POST" action="">
+                <div class="form-group">
+                    <input type="text" id="akun" name="akun" placeholder="Nama Akun" required>
+                </div>
 
-        <form method="POST" action="">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+                <div class="form-group">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+
+                <button type="submit" class="register-button"> Login </button>
+            </form>
+
+            <div class="register-link">
+                Belum punya akun? <a href="register.php"> Daftar disini </a>
             </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-
-            <button type="submit" class="login-button"><a href="home.php">Login</button></a>
         </form>
-
-        <div class="register-link">
-            Belum punya akun? <a href="register.php">Daftar disini</a>
-        </div>
     </div>
 </body>
 
 </html>
+
+<script>
+    function login() {
+        const akun = document.getElementById('akun').value;
+    }
+</script>

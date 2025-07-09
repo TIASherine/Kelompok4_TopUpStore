@@ -1,5 +1,5 @@
 <?php
-$page = 'game';
+$page = 'home';
 include 'header.php';
 ?>
 
@@ -124,7 +124,7 @@ include 'header.php';
 
             <div class="product-card">
                 <div class="product-image-container">
-                    <img class="product-image" src="https://ecfeda1c.rocketcdn.me/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2023/10/roblox-1-1200px-png.png.webp" alt="Voucher Game 8">
+                    <img class="product-image" src="https://t4.ftcdn.net/jpg/04/21/24/77/360_F_421247758_st0YftYSez6gg3x3jP96ih6tIEctyFxg.jpg" alt="Voucher Game 8">
                 </div>
                 <div class="product-description">
                     <h3>Voucher Roblox</h3>
