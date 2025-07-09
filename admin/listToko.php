@@ -12,10 +12,10 @@ function getToko($conn, $search = null)
     $types = "";
 
     if ($search) {
-        $sql .= " AND (ID_TOKO LIKE ? OR NAMA_GAME LIKE ?)";
+        $sql .= " AND (ID_TOKO LIKE ? OR NAMA_GAME LIKE ? OR PRODUK LIKE ? OR HARGA LIKE ?)";
         $search_term = "%$search%";
-        $params = [$search_term, $search_term];
-        $types = "ss";
+        $params = [$search_term, $search_term, $search_term, $search_term];
+        $types = "ssss";
     }
 
 
@@ -118,7 +118,6 @@ $toko = getToko($koneksi, $search);
                     <th> Nama Game </th>
                     <th> Produk </th>
                     <th> Harga </th>
-                    <th> Aksi </th>
                 </tr>
             </thead>
 
@@ -126,7 +125,7 @@ $toko = getToko($koneksi, $search);
             <tbody>
                 <?php if (empty($toko)): ?>
                     <tr>
-                        <td colspan="5"> Data toko tidak ditemukan. </td>
+                        <td colspan="4"> Data toko tidak ditemukan. </td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($toko as $list): ?>
@@ -135,13 +134,7 @@ $toko = getToko($koneksi, $search);
                             <td><?= htmlspecialchars($list['ID_TOKO']) ?></td>
                             <td><?= htmlspecialchars($list['NAMA_GAME']) ?></td>
                             <td><?= htmlspecialchars($list['PRODUK']) ?></td>
-                            <td><?= htmlspecialchars($list['HARGA']) ?></td>
-                            <td>
-                                <a href="../crud.php?aksi=hapus&id=<?= $order['ID_TOKO'] ?>&table=TOKO&redirect=listToko.php"
-                                    onclick="return confirm('Yakin ingin menghapus toko ini?')">
-                                    <img src="../trash.jpg" alt="Hapus" width="20">
-                                </a>
-                            </td>
+                            <td><?php echo "Rp " . number_format($list['HARGA'], 0, ',', '.');?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

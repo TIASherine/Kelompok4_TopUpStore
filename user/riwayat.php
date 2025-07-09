@@ -122,7 +122,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <td><?php echo htmlspecialchars($list['USERNAME']); ?></td>
                                 <td><?php echo htmlspecialchars($list['AKUN']); ?></td>
                                 <td><?php echo htmlspecialchars($list['PEMBELIAN']); ?></td>
-                                <td><?php echo htmlspecialchars($list['HARGA']); ?></td>
+                                <td><?php echo "Rp " . number_format($list['HARGA'], 0, ',', '.'); ?></td>
                                 <td><?php echo htmlspecialchars($list['METODE_PEMBAYARAN']); ?></td>
                                 <td><?php echo date('Y M d', strtotime($list['TANGGAL'])); ?></td>
                                 <td><?php echo htmlspecialchars($list['STATUS']); ?></td>

@@ -23,13 +23,24 @@ $tanggal = date('Y-m-d');
 $status = 'Menunggu';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && $pembeliId && $name && $paymentMethod) {
-    mysqli_query($koneksi, "INSERT IGNORE INTO PEMBELI (ID_PEMBELI, USERNAME, AKUN_WEBSITE) VALUES ('$pembeliId', '$name', '$akun')");
-
-    mysqli_query($koneksi, "INSERT IGNORE INTO TOKO (ID_TOKO, NAMA_GAME, PRODUK, HARGA) VALUES ('$idToko', '$game', '$produk', '$hargaAngka')");
-
-    mysqli_query($koneksi, "INSERT INTO TRANSAKSI (ID_TOKO_TR, ID_PEMBELI_TR, PRODUK_TRANSAKSI, HARGA, METODE_PEMBAYARAN, WAKTU_TR, STATUS) 
-                VALUES ('$idToko', '$pembeliId', '$produk', '$hargaAngka', '$paymentMethod', '$tanggal', '$status')");
+    $stmt = $koneksi->prepare("CALL INSERT_DATA(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param(
+        "ssssssisss",
+        $pembeliId,
+        $name,
+        $akun,
+        $idToko,
+        $game,
+        $produk,
+        $hargaAngka,
+        $paymentMethod,
+        $tanggal,
+        $status
+    );
+    $stmt->execute();
+    $stmt->close();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $pembeliId && $name && $paymentMetho
         @import url(https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2);
 
         .main-content {
-                padding: 20px 5% 40px;
+            padding: 20px 5% 40px;
         }
     </style>
 </head>
@@ -99,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $pembeliId && $name && $paymentMetho
                     <input type="hidden" name="idToko" id="idToko">
                     <br>
 
-                    <button type="submit" class="confirm-button"> Konfirmasi Pembayaran </button>
+                    <button type="submit" class="confirm-button" id="kirim"> Konfirmasi Pembayaran </button>
                     <button type="button" class="confirm-button" onclick="window.location.href='home.php'"> Kembali
                     </button>
                 </form>
@@ -182,9 +193,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $pembeliId && $name && $paymentMetho
                                 WhatsApp:
                                 <strong>
                                     <a href="https://wa.me/+6282169949018" style="color: white;"> Bennett id </a></strong>
-                                dengan
-                                menyertakan bukti transfer.
+                                dengan menyertakan bukti transfer.
                             </p>
+
+                            <?php ?>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -195,6 +207,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $pembeliId && $name && $paymentMetho
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const produkData = localStorage.getItem("produkDipilih");
+
+            const isDisabled = localStorage.getItem("submitDisabled") === "true";
+            const submitButton = document.getElementById('kirim');
+            if (isDisabled) {
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sudah Dikonfirmasi';
+                submitButton.style.opacity = '0.6';
+            }
 
             if (produkData) {
                 const produk = JSON.parse(produkData);
@@ -213,41 +233,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $pembeliId && $name && $paymentMetho
 
                 let id_Toko = '';
                 switch (produk.game) {
-                    case 'Mobile Legends':
-                        id_Toko = '229811ML';
-                        break;
-                    case 'Free Fire':
-                        id_Toko = '199233FF';
-                        break;
-                    case 'PUBG Mobile':
-                        id_Toko = '009231PM';
-                        break;
-                    case 'Valorant':
-                        id_Toko = '298003V';
-                        break;
-                    case 'Genshin Impact':
-                        id_Toko = '100991GI';
-                        break;
-                    case 'Wuthering Waves':
-                        id_Toko = '200192WW';
-                        break;
-                    case 'Zenless Zone Zero':
-                        id_Toko = '112256ZZZ';
-                        break;
-                    case 'Roblox':
-                        id_Toko = '8901922R';
-                        break;
-                    case 'Honor of Kings':
-                        id_Toko = '889183HOK';
-                        break;
+                    case 'Mobile Legends': id_Toko = '229811ML'; break;
+                    case 'Free Fire': id_Toko = '199233FF'; break;
+                    case 'PUBG Mobile': id_Toko = '009231PM'; break;
+                    case 'Valorant': id_Toko = '298003V'; break;
+                    case 'Genshin Impact': id_Toko = '100991GI'; break;
+                    case 'Wuthering Waves': id_Toko = '200192WW'; break;
+                    case 'Zenless Zone Zero': id_Toko = '112256ZZZ'; break;
+                    case 'Roblox': id_Toko = '8901922R'; break;
+                    case 'Honor of Kings': id_Toko = '889183HOK'; break;
                 }
 
                 document.getElementById('idToko').value = id_Toko;
-
-                document.getElementById('paymentForm').addEventListener('submit', function () {
-                    localStorage.removeItem("produkDipilih");
-                });
             }
+
+            document.getElementById('paymentForm').addEventListener('submit', function () {
+                const submitButton = document.getElementById('kirim');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Memproses...';
+                submitButton.style.opacity = '0.6';
+
+                localStorage.setItem("submitDisabled", "true");
+
+                localStorage.removeItem("produkDipilih");
+            });
+
+            document.querySelector('button[onclick*="home.php"]').addEventListener('click', function () {
+                localStorage.removeItem("submitDisabled");
+            });
         });
     </script>
 

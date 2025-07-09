@@ -12,10 +12,10 @@ function getPembeli($conn, $search = null)
     $types = "";
 
     if ($search) {
-        $sql .= " AND (ID_PEMBELI LIKE ? OR USERNAME LIKE ?)";
+        $sql .= " AND (ID_PEMBELI LIKE ? OR USERNAME LIKE ? OR AKUN_WEBSITE LIKE ?)";
         $search_term = "%$search%";
-        $params = [$search_term, $search_term];
-        $types = "ss";
+        $params = [$search_term, $search_term, $search_term];
+        $types = "sss";
     }
 
 
@@ -34,19 +34,6 @@ function getPembeli($conn, $search = null)
     }
 
     return $pembeli;
-}
-
-// Proses hapus data
-if (isset($_GET['delete_id'])) {
-    $delete_id = intval($_GET['delete_id']);
-
-    $stmt = $koneksi->prepare("DELETE FROM PEMBELI WHERE ID_PEMBELI = ?");
-    $stmt->bind_param("i", $delete_id);
-    $stmt->execute();
-    $stmt->close();
-
-    header("Location: listPembeli.php");
-    exit;
 }
 
 // Ambil parameter pencarian
@@ -117,27 +104,20 @@ $pembeli = getPembeli($koneksi, $search);
                     <th> UID </th>
                     <th> Username </th>
                     <th> Akun </th>
-                    <th>Aksi </th>
                 </tr>
             </thead>
 
             <tbody>
                 <?php if (empty($pembeli)): ?>
                     <tr>
-                        <td colspan="4"> Data pembeli tidak ditemukan. </td>
+                        <td colspan="3"> Data pembeli tidak ditemukan. </td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($pembeli as $list): ?>
                         <tr>
                             <td><?= htmlspecialchars($list['ID_PEMBELI']) ?></td>
                             <td><?= htmlspecialchars($list['USERNAME']) ?></td>
-                            <td><?= htmlspecialchars($list['USERNAME']) ?></td>
-                            <td>
-                                <a href="../crud.php?aksi=hapus&id=<?= $order['ID_PEMBELI'] ?>&table=PEMBELI&redirect=listPembeli.php"
-                                    onclick="return confirm('Yakin ingin menghapus pembeli ini?')">
-                                    <img src="../trash.jpg" alt="Hapus" width="20">
-                                </a>
-                            </td>
+                            <td><?= htmlspecialchars($list['AKUN_WEBSITE']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

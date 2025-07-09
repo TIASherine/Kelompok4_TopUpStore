@@ -32,9 +32,13 @@ $params = [];
 if ($search !== '') {
     $search = mysqli_real_escape_string($koneksi, $search);
     $sql .= " AND (
+        ID_TRANSAKSI LIKE '%$search%' OR
         ID_TOKO_TR LIKE '%$search%' OR
         ID_PEMBELI_TR LIKE '%$search%' OR
-        PRODUK_TRANSAKSI LIKE '%$search%'
+        PRODUK_TRANSAKSI LIKE '%$search%' OR
+        HARGA LIKE '%$search%' OR
+        METODE_PEMBAYARAN LIKE '%$search%' OR
+        WAKTU_TR LIKE '%$search%'
     )";
 }
 
@@ -109,7 +113,8 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         <br>
 
-        <h3> Rangkuman Transaksi Tanggal <strong> <?php echo date('Y-m-d'); ?> </strong> </h3>
+        <h3> Rangkuman Transaksi Tanggal <strong style="color:rgb(175, 48, 230);"> <?php echo date('Y-m-d'); ?>
+            </strong> </h3>
     </div>
 
     <br>

@@ -23,7 +23,7 @@ $akun = $_SESSION['username'] ?? 'Login';
     <header>
         <a href="home.php" class="logo"> <?php echo $akun ?> </a>
         <nav>
-            <a class="<?= ($page == 'game') ? 'navigation' : '' ?>" href="game.php"> Beranda </a>
+            <a class="<?= ($page == 'home') ? 'navigation' : '' ?>" href="home.php"> Beranda </a>
             <a class="<?= ($page == 'riwayat') ? 'navigation' : '' ?>" href="riwayat.php"> Riwayat </a>
             <a href="../index.php"> Keluar </a>
         </nav>
