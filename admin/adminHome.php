@@ -5,23 +5,23 @@ include '../konekDatabase.php';
 $db = new konekDatabase();
 $koneksi = $db->getConnection();
 
-$sql = "FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE()";
+$totalSql =  mysqli_query($koneksi, "SELECT COUNT(*) AS jumlahTransaksi FROM TRANSAKSI"); 
+$total = mysqli_fetch_assoc($totalSql)['jumlahTransaksi'];
 
-$countQuery = mysqli_query($koneksi, "SELECT COUNT(*) AS jumlah $sql");
-$countSql = mysqli_fetch_assoc($countQuery);
-$count = $countSql['jumlah'];
+$allSql = mysqli_query($koneksi, "SELECT SUM(HARGA) AS totalPendapatan FROM TRANSAKSI WHERE STATUS = 'Selesai'");
+$all = mysqli_fetch_assoc($allSql)['totalPendapatan'];
 
-$maxQuery = mysqli_query($koneksi, "SELECT MAX(HARGA) AS max_harga $sql");
-$maxSql = mysqli_fetch_assoc($maxQuery);
-$max = $maxSql['max_harga'];
+$countSql = mysqli_query($koneksi, "SELECT COUNT(*) AS jumlah FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE() AND STATUS = 'Selesai'");
+$count = mysqli_fetch_assoc($countSql)['jumlah'];
 
-$minQuery = mysqli_query($koneksi, "SELECT MIN(HARGA) AS min_harga $sql");
-$minSql = mysqli_fetch_assoc($minQuery);
-$min = $minSql['min_harga'];
+$maxSql = mysqli_query($koneksi, "SELECT MAX(HARGA) AS max_harga FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE() AND STATUS = 'Selesai'");
+$max = mysqli_fetch_assoc($maxSql)['max_harga'];
 
-$avgQuery = mysqli_query($koneksi, "SELECT AVG(HARGA) AS avg_harga $sql");
-$avgSql = mysqli_fetch_assoc($avgQuery);
-$avg = $avgSql['avg_harga'];
+$minSql = mysqli_query($koneksi, "SELECT MIN(HARGA) AS min_harga FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE() AND STATUS = 'Selesai'");
+$min = mysqli_fetch_assoc($minSql)['min_harga'];
+
+$avgSql = mysqli_query($koneksi, "SELECT AVG(HARGA) AS avg_harga FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE() AND STATUS = 'Selesai'");
+$avg = mysqli_fetch_assoc($avgSql)['avg_harga'];
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $status_filter = isset($_GET['status_filter']) ? trim($_GET['status_filter']) : '';
@@ -113,6 +113,27 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         <br>
 
+        <div class="admin">
+            <div class="admin-containers">
+                <h4> Total Transaksi <br><br> </h4>
+                <br>
+                <div class="dashboard">
+                    <?php echo $total; ?>
+                </div>
+            </div>
+
+            <div class="admin-containers">
+                <h4> Total Pendapatan <br><br> </h4>
+                <br>
+                <div class="dashboard">
+                    <?php echo "Rp " . number_format($all, 0, ',', '.');
+                    ; ?>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
         <h3> Rangkuman Transaksi Tanggal <strong style="color:rgb(175, 48, 230);"> <?php echo date('Y-m-d'); ?>
             </strong> </h3>
     </div>
@@ -162,7 +183,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <option value=""> Tampilkan Semua </option>
                 <option value="menunggu" <?= $status_filter == 'menunggu' ? 'selected' : '' ?>> Menunggu </option>
                 <option value="selesai" <?= $status_filter == 'selesai' ? 'selected' : '' ?>> Selesai </option>
-                <option value="gagal" <?= $status_filter == 'gagal' ? 'selected' : '' ?>> Gagal </option>
             </select>
             <button type="submit"> Cari </button>
         </form>

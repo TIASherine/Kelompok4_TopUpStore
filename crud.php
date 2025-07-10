@@ -123,7 +123,6 @@ if ($aksi == 'update') {
                                 <select name="STATUS" id="status">
                                     <option value="Menunggu" <?= (isset($data['STATUS']) && $data['STATUS'] === 'menunggu') ? 'selected' : '' ?>> Menunggu </option>
                                     <option value="Selesai" <?= (isset($data['STATUS']) && $data['STATUS'] === 'selesai') ? 'selected' : '' ?>> Selesai </option>
-                                    <option value="Gagal" <?= (isset($data['STATUS']) && $data['STATUS'] === 'gagal') ? 'selected' : '' ?>> Gagal </option>
                                 </select>
                             <?php else: ?>
                                 <input type="text" name="<?= $col ?>" value="<?= htmlspecialchars($data[$col] ?? '') ?>">
