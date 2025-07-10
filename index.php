@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $akun = $_POST['akun'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    if ($akun != "sudo_admin") {
+    if ($akun != "admin") {
         $result = $db->execute("SELECT * FROM AKUN WHERE NAMA_AKUN = '$akun'");
 
         if (!$result || count($result) === 0) {
