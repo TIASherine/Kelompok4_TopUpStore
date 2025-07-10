@@ -224,7 +224,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                                     <img src="../edit.jpeg" alt="Edit" style="width: 25px;">
                                 </a>
 
-                                <a href="../crud.php?aksi=delete&id=<?= $order['ID_TRANSAKSI'] ?>&table=TRANSAKSI&redirect=admin/adminHome.php"
+                                <a href="../crud.php?aksi=hapus&id=<?= $order['ID_TRANSAKSI'] ?>&table=TRANSAKSI&redirect=admin/adminHome.php"
                                     onclick="return confirm('Yakin ingin menghapus transaksi ini?')">
                                     <img src="../trash.jpg" alt="Hapus" style="width: 20px;">
                                 </a>
