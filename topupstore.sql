@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2025 at 04:44 AM
+-- Generation Time: Jul 10, 2025 at 04:12 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,29 @@ SET time_zone = "+00:00";
 --
 -- Database: `topupstore`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `INSERT_DATA` (IN `p_ID_PEMBELI` VARCHAR(20), IN `p_USERNAME` VARCHAR(100), IN `p_AKUN_WEBSITE` VARCHAR(100), IN `p_ID_TOKO` VARCHAR(20), IN `p_NAMA_GAME` VARCHAR(100), IN `p_PRODUK` VARCHAR(100), IN `p_HARGA` INT, IN `p_METODE_PEMBAYARAN` VARCHAR(50), IN `p_TANGGAL` DATE, IN `p_STATUS` VARCHAR(20))   BEGIN
+    INSERT IGNORE INTO PEMBELI (ID_PEMBELI, USERNAME, AKUN_WEBSITE)
+    VALUES (p_ID_PEMBELI, p_USERNAME, p_AKUN_WEBSITE);
+
+    INSERT IGNORE INTO TOKO (ID_TOKO, NAMA_GAME, PRODUK, HARGA)
+    VALUES (p_ID_TOKO, p_NAMA_GAME, p_PRODUK, p_HARGA);
+
+    INSERT INTO TRANSAKSI (
+        ID_TOKO_TR, ID_PEMBELI_TR, PRODUK_TRANSAKSI, HARGA,
+        METODE_PEMBAYARAN, WAKTU_TR, STATUS
+    )
+    VALUES (
+        p_ID_TOKO, p_ID_PEMBELI, p_PRODUK, p_HARGA,
+        p_METODE_PEMBAYARAN, p_TANGGAL, p_STATUS
+    );
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -38,7 +61,10 @@ CREATE TABLE `akun` (
 --
 
 INSERT INTO `akun` (`NAMA_AKUN`, `EMAIL`, `PASSWORD`) VALUES
+('mikel', 'mikel@yahoo.com', 'mikel'),
 ('sherine', 'sherine24ti@mahasiswa.pcr.ac.id', 'sherine'),
+('sherine24', 'sherine@gmail.com', 'sherine24'),
+('sherine241', 'gemcom177@gmail.com', 'as12'),
 ('user', 'user22@gmail.com', 'hallo111');
 
 -- --------------------------------------------------------
@@ -58,10 +84,22 @@ CREATE TABLE `pembeli` (
 --
 
 INSERT INTO `pembeli` (`ID_PEMBELI`, `USERNAME`, `AKUN_WEBSITE`) VALUES
+('0000000zero', 'zero', 'sherine24'),
+('00918344', 'Heelllo', 'sherine24'),
+('00918344435453', 'Glowstick', 'sherine24'),
 ('076295031', 'Bennett_Pro', 'user'),
+('100123', 'jaxkip', 'mikel'),
+('11111111', 'mikhail', 'sherine24'),
+('113345565', 'ABCabjad', 'sherine24'),
+('333641113', '111Hei111', 'sherine24'),
 ('343143143', 'iqdb132e34', 'sherine'),
+('44345112', 'Eni', 'sherine'),
+('55451234', 'Main123Main', 'sherine24'),
+('6614177623', 'WAaW1', 'sherine'),
+('76768423', 'EEEE123', 'sherine24'),
 ('809989427', 'Sherine', 'sherine'),
-('851899868', 'Sien', 'sherine');
+('851899868', 'Sien', 'sherine'),
+('91919182', 'Bennnnet', 'sherine24');
 
 -- --------------------------------------------------------
 
@@ -81,10 +119,15 @@ CREATE TABLE `toko` (
 --
 
 INSERT INTO `toko` (`ID_TOKO`, `NAMA_GAME`, `PRODUK`, `HARGA`) VALUES
+('009231PM', 'PUBG Mobile', 'UC', 20000.00),
 ('100991GI', 'Genshin Impact', 'Primogem', 40000.00),
+('112256ZZZ', 'Zenless Zone Zero', 'Monochrome', 30000.00),
 ('199233FF', 'Free Fire', 'Diamond Free Fire', 15000.00),
+('200192WW', 'Wuthering Waves', 'Lunites', 30000.00),
+('229811ML', 'Mobile Legends', 'Diamond Mobile Legends', 10000.00),
 ('298003V', 'Valorant', 'Valorant Point', 25000.00),
-('889183HOK', 'Honor of Kings', 'Token', 30000.00);
+('889183HOK', 'Honor of Kings', 'Token', 30000.00),
+('8901922R', 'Roblox', 'Robux', 30000.00);
 
 -- --------------------------------------------------------
 
@@ -108,27 +151,23 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`ID_TRANSAKSI`, `ID_TOKO_TR`, `ID_PEMBELI_TR`, `PRODUK_TRANSAKSI`, `HARGA`, `METODE_PEMBAYARAN`, `WAKTU_TR`, `STATUS`) VALUES
-(1, '100991GI', '851899868', 'Primogem', 40000.00, 'DANA', '2025-07-09', 'Menunggu'),
-(2, '889183HOK', '809989427', 'Token', 30000.00, 'QRIS', '2025-07-09', 'Menunggu'),
+(1, '100991GI', '851899868', 'Primogem', 40000.00, 'DANA', '2025-07-09', 'Selesai'),
+(2, '889183HOK', '809989427', 'Token', 30000.00, 'QRIS', '2025-07-09', 'Selesai'),
 (3, '199233FF', '076295031', 'Diamond Free Fire', 15000.00, 'DANA', '2025-07-09', 'Menunggu'),
-(4, '298003V', '343143143', 'Valorant Point', 25000.00, 'QRIS', '2025-07-09', 'Menunggu');
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `transaksi_top_up`
--- (See below for the actual view)
---
-CREATE TABLE `transaksi_top_up` (
-`ID_TRANSAKSI` int(4)
-,`ID_TOKO_TR` varchar(20)
-,`ID_PEMBELI_TR` varchar(30)
-,`PRODUK_TRANSAKSI` varchar(50)
-,`HARGA` decimal(10,2)
-,`METODE_PEMBAYARAN` varchar(40)
-,`WAKTU_TR` date
-,`STATUS` varchar(10)
-);
+(4, '298003V', '343143143', 'Valorant Point', 25000.00, 'QRIS', '2025-07-09', 'Menunggu'),
+(5, '200192WW', '44345112', 'Lunites', 30000.00, 'OVO', '2025-07-09', 'Menunggu'),
+(6, '889183HOK', '6614177623', 'Token', 30000.00, 'GoPay', '2025-07-09', 'Menunggu'),
+(7, '199233FF', '00918344', 'Diamond Free Fire', 15000.00, 'OVO', '2025-07-10', 'Selesai'),
+(8, '229811ML', '113345565', 'Diamond Mobile Legends', 10000.00, 'Bank Transfer', '2025-07-10', 'Menunggu'),
+(9, '889183HOK', '76768423', 'Token', 30000.00, 'OVO', '2025-07-10', 'Menunggu'),
+(10, '8901922R', '55451234', 'Robux', 30000.00, 'QRIS', '2025-07-10', 'Menunggu'),
+(11, '112256ZZZ', '333641113', 'Monochrome', 30000.00, 'GoPay', '2025-07-10', 'Menunggu'),
+(12, '009231PM', '91919182', 'UC', 20000.00, 'DANA', '2025-07-10', 'Menunggu'),
+(13, '009231PM', '00918344435453', 'UC', 20000.00, 'GoPay', '2025-07-10', 'Menunggu'),
+(14, '229811ML', '100123', 'Diamond Mobile Legends', 10000.00, 'DANA', '2025-07-10', 'Menunggu'),
+(15, '100991GI', '100123', 'Primogem', 40000.00, 'DANA', '2025-07-10', 'Menunggu'),
+(16, '229811ML', '0000000zero', 'Diamond Mobile Legends', 10000.00, 'Bank Transfer', '2025-07-10', 'Menunggu'),
+(17, '8901922R', '11111111', 'Robux', 30000.00, 'QRIS', '2025-07-10', 'Menunggu');
 
 -- --------------------------------------------------------
 
@@ -146,15 +185,6 @@ CREATE TABLE `transaksi_user` (
 ,`TANGGAL` date
 ,`STATUS` varchar(10)
 );
-
--- --------------------------------------------------------
-
---
--- Structure for view `transaksi_top_up`
---
-DROP TABLE IF EXISTS `transaksi_top_up`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `transaksi_top_up`  AS SELECT `transaksi`.`ID_TRANSAKSI` AS `ID_TRANSAKSI`, `transaksi`.`ID_TOKO_TR` AS `ID_TOKO_TR`, `transaksi`.`ID_PEMBELI_TR` AS `ID_PEMBELI_TR`, `transaksi`.`PRODUK_TRANSAKSI` AS `PRODUK_TRANSAKSI`, `transaksi`.`HARGA` AS `HARGA`, `transaksi`.`METODE_PEMBAYARAN` AS `METODE_PEMBAYARAN`, `transaksi`.`WAKTU_TR` AS `WAKTU_TR`, `transaksi`.`STATUS` AS `STATUS` FROM `transaksi` ;
 
 -- --------------------------------------------------------
 
@@ -205,7 +235,7 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `ID_TRANSAKSI` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_TRANSAKSI` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
