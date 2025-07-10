@@ -11,13 +11,13 @@ $total = mysqli_fetch_assoc($totalSql)['jumlahTransaksi'];
 $allSql = mysqli_query($koneksi, "SELECT SUM(HARGA) AS totalPendapatan FROM TRANSAKSI WHERE STATUS = 'Selesai'");
 $all = mysqli_fetch_assoc($allSql)['totalPendapatan'];
 
-$countSql = mysqli_query($koneksi, "SELECT COUNT(*) AS jumlah FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE() AND STATUS = 'Selesai'");
+$countSql = mysqli_query($koneksi, "SELECT COUNT(*) AS jumlah FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE()");
 $count = mysqli_fetch_assoc($countSql)['jumlah'];
 
-$maxSql = mysqli_query($koneksi, "SELECT MAX(HARGA) AS max_harga FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE() AND STATUS = 'Selesai'");
+$maxSql = mysqli_query($koneksi, "SELECT MAX(HARGA) AS max_harga FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE()");
 $max = mysqli_fetch_assoc($maxSql)['max_harga'];
 
-$minSql = mysqli_query($koneksi, "SELECT MIN(HARGA) AS min_harga FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE() AND STATUS = 'Selesai'");
+$minSql = mysqli_query($koneksi, "SELECT MIN(HARGA) AS min_harga FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE()");
 $min = mysqli_fetch_assoc($minSql)['min_harga'];
 
 $avgSql = mysqli_query($koneksi, "SELECT AVG(HARGA) AS avg_harga FROM TRANSAKSI WHERE DATE(WAKTU_TR) = CURDATE() AND STATUS = 'Selesai'");

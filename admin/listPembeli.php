@@ -18,7 +18,8 @@ function getPembeli($conn, $search = null)
         $types = "sss";
     }
 
-
+    $sql .= " ORDER BY AKUN_WEBSITE";
+    
     $stmt = $conn->prepare($sql);
 
     if (!empty($params)) {
