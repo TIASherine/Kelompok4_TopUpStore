@@ -26,7 +26,7 @@ $avg = $avgSql['avg_harga'];
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $status_filter = isset($_GET['status_filter']) ? trim($_GET['status_filter']) : '';
 
-$sql = "SELECT * FROM TRANSAKSI_TOP_UP WHERE 1=1";
+$sql = "SELECT * FROM TRANSAKSI WHERE 1=1";
 $params = [];
 
 if ($search !== '') {
