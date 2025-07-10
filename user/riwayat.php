@@ -78,11 +78,10 @@ while ($row = mysqli_fetch_assoc($result)) {
 
                 <select name="status_filter">
                     <option value=""> Tampilkan Semua </option>
-                    <option value="pending" <?php echo ($status_filter == 'menunggu') ? 'selected' : ''; ?>> Menunggu
+                    <option value="menunggu" <?php echo ($status_filter == 'menunggu') ? 'selected' : ''; ?>> Menunggu
                     </option>
                     <option value="selesai" <?php echo ($status_filter == 'selesai') ? 'selected' : ''; ?>> Selesai
                     </option>
-                    <option value="gagal" <?php echo ($status_filter == 'gagal') ? 'selected' : ''; ?>> Gagal </option>
                 </select>
 
                 <button type="submit" style="width: 50px;"> Filter </button>
