@@ -86,6 +86,13 @@ $toko = getToko($koneksi, $search);
         border: 1px solid #ccc;
     }
 
+    th:nth-child(2),
+    td:nth-child(2) {
+        text-align: center;
+        padding: 8px;
+        border: 1px solid #ccc;
+    }
+
     a {
         color: rgb(107, 228, 63);
         text-decoration: none;
@@ -93,11 +100,11 @@ $toko = getToko($koneksi, $search);
 </style>
 
 <body>
-    <div class="admin-container">
+    <div class="admin-container" style="min-width: 700px;">
         <h1> List Toko </h1>
 
         <br>
-    
+
         <div class="search-bar">
             <form method="GET">
                 <input type="text" name="search" placeholder="Cari Toko .."
@@ -134,7 +141,7 @@ $toko = getToko($koneksi, $search);
                             <td><?= htmlspecialchars($list['ID_TOKO']) ?></td>
                             <td><?= htmlspecialchars($list['NAMA_GAME']) ?></td>
                             <td><?= htmlspecialchars($list['PRODUK']) ?></td>
-                            <td><?php echo "Rp " . number_format($list['HARGA'], 0, ',', '.');?></td>
+                            <td><?php echo "Rp " . number_format($list['HARGA'], 0, ',', '.'); ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>
